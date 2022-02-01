@@ -4,6 +4,7 @@ import me.faun.givepet.PetManager;
 import me.faun.givepet.Utils.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Sittable;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,7 +27,7 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
-        if (pet.getOwnerUniqueId() != null && !pet.getOwnerUniqueId().equals(player.getUniqueId())) {
+        if (pet.isTamed() && pet.getOwnerUniqueId() != null && !pet.getOwnerUniqueId().equals(player.getUniqueId())) {
             petManager.removePDC(player, petManager.getKey());
             StringUtils.sendComponent(player, "&cThat's not your pet!");
         }
@@ -46,6 +47,10 @@ public class PlayerInteractListener implements Listener {
     }
 
     public void transferPet(Tameable pet, Player giver, Player receiver) {
+        if (pet instanceof Sittable sittable && sittable.isSitting()) {
+            sittable.setSitting(false);
+        }
+
         pet.setOwner(receiver);
         petManager.removePDC(giver, petManager.getKey());
 
