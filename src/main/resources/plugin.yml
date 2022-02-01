@@ -1,7 +1,7 @@
 name: GivePet
 version: '${version}'
 main: me.faun.givepet.GivePet
-api-version: 1.13
+api-version: 1.16
 prefix: "GivePet"
 authors: [ Faun ]
 description: Allows players to transfer pet ownership to other players.

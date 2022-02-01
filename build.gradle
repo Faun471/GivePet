@@ -20,15 +20,20 @@ repositories {
         name = 'jitpack-io'
         url = 'https://jitpack.io'
     }
+    maven {
+        url = 'https://repo.triumphteam.dev/snapshots/'
+    }
 }
 
 dependencies {
-    compileOnly 'com.destroystokyo.paper:paper-api:1.14-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT'
+    implementation 'net.kyori:adventure-api:4.9.3'
     implementation 'com.github.Obliviated:BlokSQLiteAPI:1.0.7-b'
     implementation 'me.mattstudios.utils:matt-framework:1.4.6'
+    implementation 'me.mattstudios:triumph-msg-adventure:2.2.4-SNAPSHOT'
 }
 
-def targetJavaVersion = 8
+def targetJavaVersion = 16
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = '17.PREVIEW'
@@ -56,4 +61,5 @@ processResources {
 shadowJar {
     relocate 'me.mattstudios.mf', 'me.faun.givepet.mf'
     relocate 'mc.obliviate.bloksqliteapi', 'me.faun.givepet.bloksqliteapi'
+    relocate 'me.mattstudios.msg', 'me.faun.givepet.mfmsg'
 }

@@ -14,7 +14,7 @@ public final class GivePet extends JavaPlugin {
     private static SQLTable requestsTable;
     private static SQLTable logsTable;
 
-    @Override
+        @Override
     public void onEnable() {
         instance = this;
 
@@ -26,11 +26,11 @@ public final class GivePet extends JavaPlugin {
         commandManager.register(new GivePetCommand());
 
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(),this);
+        sqlManager.clearTable(requestsTable);
     }
 
     @Override
     public void onDisable() {
-
     }
 
     public static GivePet getInstance() {
@@ -44,6 +44,5 @@ public final class GivePet extends JavaPlugin {
     public SQLTable getLogsTable() {
         return logsTable;
     }
-
 
 }

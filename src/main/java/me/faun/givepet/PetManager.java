@@ -8,27 +8,26 @@ import org.bukkit.persistence.PersistentDataType;
 
 public class PetManager {
 
-    private final NamespacedKey giveKey = new NamespacedKey(GivePet.getInstance(),"give-pet");
-    private final NamespacedKey requestKey = new NamespacedKey(GivePet.getInstance(), "request");
+    private final NamespacedKey key = new NamespacedKey(GivePet.getInstance(),"give-pet");
 
     public PetManager() {
 
     }
 
-    public NamespacedKey getGiveKey() {
-        return giveKey;
-    }
-
-    public NamespacedKey getRequestKey() {
-        return requestKey;
+    public NamespacedKey getKey() {
+        return key;
     }
 
     public void addPDC(Player giver, String arg) {
         PersistentDataContainer pdc = giver.getPersistentDataContainer();
-        pdc.set(giveKey, PersistentDataType.STRING, arg);
+        pdc.set(key, PersistentDataType.STRING, arg);
 
         Bukkit.getScheduler().runTaskLater(GivePet.getInstance(), () -> {
-            pdc.remove(giveKey);
+            if (pdc.isEmpty()) {
+                return;
+            }
+
+            pdc.remove(key);
             giver.sendMessage("timer expired.");
         }, 20L * 15);
     }

@@ -5,9 +5,6 @@ import mc.obliviate.bloksqliteapi.sqlutils.DataType;
 import mc.obliviate.bloksqliteapi.sqlutils.SQLTable;
 import me.faun.givepet.GivePet;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class SQLManager extends SQLHandler {
     public SQLManager(GivePet plugin) {
         super(plugin.getDataFolder().getAbsolutePath());
@@ -50,31 +47,9 @@ public class SQLManager extends SQLHandler {
                 .putData("finished", values[3]));
     }
 
-    public boolean isPending(ResultSet resultSet) {
-        try {
-            if (resultSet.isClosed()) {
-                return false;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return getStringFromResultSet(resultSet, "finished").equalsIgnoreCase("pending");
-    }
-
-    public String getStringFromResultSet(ResultSet resultSet, String column) {
-        try {
-            return resultSet.getString(column);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return "";
-    }
-
     public void logRequest(String sender, String receiver, String time, String finished) {
         SQLTable logsTable = GivePet.getInstance().getLogsTable();
         int id = logsTable.getSingleHighest("id") != null ? Integer.parseInt(logsTable.getSingleHighest("id")) + 1 : 1;
-        System.out.println("id is " + id);
         logsTable.insert(logsTable.createUpdate("id")
                 .putData("id", id)
                 .putData("sender", sender)
@@ -82,5 +57,9 @@ public class SQLManager extends SQLHandler {
                 .putData("time", time)
                 .putData("finished", finished)
         );
+    }
+
+    public void clearTable(SQLTable sqlTable) {
+        SQLHandler.sqlUpdate("DELETE FROM " + sqlTable.getTableName() + ";" + "\nVACUUM;");
     }
 }
