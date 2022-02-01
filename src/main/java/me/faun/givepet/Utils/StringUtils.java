@@ -1,5 +1,9 @@
 package me.faun.givepet.Utils;
 
+import ch.jalu.configme.SettingsManager;
+import ch.jalu.configme.properties.Property;
+import me.faun.givepet.Configs.ConfigManager;
+import me.faun.givepet.Configs.Messages;
 import me.mattstudios.msg.adventure.AdventureMessage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -24,7 +28,7 @@ public class StringUtils {
     public static Component messageParse(String text) {
         final AdventureMessage message = AdventureMessage.create();
 
-        return message.parse(text.replace("%prefix%", "[GivePet]"));
+        return message.parse(text.replace("%prefix%", getStringFromMessages(Messages.PREFIX)));
     }
 
     /**
@@ -59,8 +63,8 @@ public class StringUtils {
      *  @param player   The player that will receive the message.
      *  @param message  The message that will be sent to the player.
      */
-    public static void sendComponent(Player player, String message) {
-        player.sendMessage(messageParse(message));
+    public static void sendComponent(Player player, Property<String> message) {
+        player.sendMessage(messageParse(message.toString()));
     }
 
     /**
@@ -69,8 +73,34 @@ public class StringUtils {
      *  @param sender   The CommandSender that will receive the message.
      *  @param message  The message that will be sent to the command sender.
      */
+    public static void sendComponent(CommandSender sender, Property<String> message) {
+        sender.sendMessage(messageParse(message.toString()));
+    }
+
+    /**
+     *  This will send a Component to a player
+     *
+     *  @param player   The player that will receive the message.
+     *  @param message  The message that will be sent to the player.
+     */
+    public static void sendComponent(Player player, String message) {
+        player.sendMessage(messageParse(message));
+    }
+
+    /**
+     *  This will send a Component to a player
+     *
+     *  @param sender   The CommandSender that will receive the message.
+     *  @param message  The message that will be sent to the command sender.
+     */
     public static void sendComponent(CommandSender sender, String message) {
         sender.sendMessage(messageParse(message));
+    }
+
+    public static String getStringFromMessages(Property<String> property) {
+        ConfigManager configManager = new ConfigManager();
+        SettingsManager settingsManager = configManager.getConfig("messages");
+        return settingsManager.getProperty(property);
     }
 
 }

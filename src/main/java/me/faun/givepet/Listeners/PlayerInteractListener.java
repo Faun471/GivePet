@@ -1,5 +1,7 @@
 package me.faun.givepet.Listeners;
 
+import me.faun.givepet.Configs.Messages;
+import me.faun.givepet.Events.PetTransferEvent;
 import me.faun.givepet.PetManager;
 import me.faun.givepet.Utils.StringUtils;
 import org.bukkit.Bukkit;
@@ -29,20 +31,21 @@ public class PlayerInteractListener implements Listener {
 
         if (pet.isTamed() && pet.getOwnerUniqueId() != null && !pet.getOwnerUniqueId().equals(player.getUniqueId())) {
             petManager.removePDC(player, petManager.getKey());
-            StringUtils.sendComponent(player, "&cThat's not your pet!");
+            StringUtils.sendComponent(player, StringUtils.getStringFromMessages(Messages.NOT_YOUR_PET));
         }
 
         if (player.getPersistentDataContainer().get(petManager.getKey(),PersistentDataType.STRING) == null) {
-            StringUtils.sendComponent(player, "&PDC is null!");
+            System.out.println("PDC is null.");
             return;
         }
 
         Player receiver = Bukkit.getPlayer(player.getPersistentDataContainer().get(petManager.getKey(),PersistentDataType.STRING));
         if (receiver == null) {
-            StringUtils.sendComponent(player, "&cReceiver is null!");
+            System.out.println("Receiver is null.");
             return;
         }
 
+        Bukkit.getServer().getPluginManager().callEvent(new PetTransferEvent());
         transferPet(pet, player, receiver);
     }
 
@@ -54,8 +57,8 @@ public class PlayerInteractListener implements Listener {
         pet.setOwner(receiver);
         petManager.removePDC(giver, petManager.getKey());
 
-        StringUtils.sendComponent(giver, "Successfully gave your pet to " + receiver.name());
-        StringUtils.sendComponent(receiver, giver.name() + " gave you their pet.");
+        StringUtils.sendComponent(giver, StringUtils.getStringFromMessages(Messages.GIVE_PET_SUCCESS));
+        StringUtils.sendComponent(receiver, StringUtils.getStringFromMessages(Messages.RECEIVE_PET_SUCCESS));
         petManager.removePDC(giver, petManager.getKey());
     }
 
