@@ -37,13 +37,11 @@ public class PlayerInteractListener implements Listener {
         }
 
         if (giver.getPersistentDataContainer().get(petManager.getKey(),PersistentDataType.STRING) == null) {
-            System.out.println("PDC is null.");
             return;
         }
 
         Player receiver = Bukkit.getPlayer(giver.getPersistentDataContainer().get(petManager.getKey(),PersistentDataType.STRING));
         if (receiver == null) {
-            System.out.println("Receiver is null.");
             return;
         }
 

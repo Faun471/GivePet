@@ -4,6 +4,9 @@ import mc.obliviate.bloksqliteapi.SQLHandler;
 import mc.obliviate.bloksqliteapi.sqlutils.DataType;
 import mc.obliviate.bloksqliteapi.sqlutils.SQLTable;
 import me.faun.givepet.GivePet;
+import org.bukkit.Bukkit;
+
+import java.util.logging.Level;
 
 public class SQLManager extends SQLHandler {
     public SQLManager(GivePet plugin) {
@@ -17,7 +20,7 @@ public class SQLManager extends SQLHandler {
 
     @Override
     public void onConnect() {
-        System.out.println("SQLManager connected successfully");
+        Bukkit.getLogger().log(Level.INFO, "SQLManager connected successfully");
     }
 
     public SQLTable createLogsTable() {
