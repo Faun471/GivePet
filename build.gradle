@@ -60,6 +60,7 @@ processResources {
 }
 
 shadowJar {
+    archiveClassifier = null
     relocate 'me.mattstudios.mf', 'me.faun.givepet.mf'
     relocate 'mc.obliviate.bloksqliteapi', 'me.faun.givepet.bloksqliteapi'
     relocate 'me.mattstudios.msg', 'me.faun.givepet.mfmsg'
