@@ -13,22 +13,25 @@ public final class PetTransferEvent extends Event implements Cancellable {
     PetManager petManager = new PetManager();
 
     private static final HandlerList handlers = new HandlerList();
-    private Tameable pet;
-    private Player giver;
-    private Player receiver;
+    private boolean cancelled;
+    private final Tameable pet;
+    private final Player giver;
+    private final Player receiver;
 
-    public PetTransferEvent() {
-
+    public PetTransferEvent(@NotNull Tameable pet, @NotNull Player giver , @NotNull Player receiver) {
+        this.pet = pet;
+        this.giver = giver;
+        this.receiver = receiver;
     }
 
     @Override
     public boolean isCancelled() {
-        return false;
+        return cancelled;
     }
 
     @Override
     public void setCancelled(boolean cancel) {
-
+        cancelled = cancel;
     }
 
     @Override

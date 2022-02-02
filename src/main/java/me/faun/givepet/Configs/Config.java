@@ -6,7 +6,6 @@ import ch.jalu.configme.configurationdata.CommentsConfiguration;
 import ch.jalu.configme.properties.BooleanProperty;
 import ch.jalu.configme.properties.IntegerProperty;
 import ch.jalu.configme.properties.Property;
-import ch.jalu.configme.properties.StringProperty;
 
 public final class Config implements SettingsHolder {
     public Config() {
@@ -21,9 +20,6 @@ public final class Config implements SettingsHolder {
                 "88   YP88 88 88   d8' 88ooood8     88        88ooood8   88   " ,
                 "Y8.   .88 88 88 .88'  88.  ...     88        88.  ...   88   " ,
                 " `88888'  dP 8888P'   `88888P'     dP        `88888P'   dP" ,
-                "\n" ,
-                " This is GivePet's config.yml, if you wish to know how to  " ,
-                " format the messages, please refer to this site: https://mf.mattstudios.me/message/mf-msg/syntax",
                 "\n");
     }
 
@@ -34,5 +30,8 @@ public final class Config implements SettingsHolder {
     public static final Property<Boolean> PET_TELEPORT = new BooleanProperty("teleport-when-transferred", false);
 
     @Comment({"\n","How much time in seconds should the pet be invincible upon owner change?", "Default Value: 15"})
-    public static final Property<Integer> PET_INVINCIBILITY = new IntegerProperty("invincibility-on-transfer", 15);
+    public static final Property<Integer> PET_INVINCIBILITY_TIME = new IntegerProperty("invincibility-on-transfer", 15);
+
+    @Comment({"\n","How much time in seconds should the request last before expiring?", "Default Value: 15"})
+    public static final Property<Integer> REQUEST_TIME = new IntegerProperty("request-time", 15);
 }

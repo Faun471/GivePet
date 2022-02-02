@@ -3,6 +3,7 @@ package me.faun.givepet.Configs;
 import ch.jalu.configme.SettingsHolder;
 import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.SettingsManagerBuilder;
+import ch.jalu.configme.properties.Property;
 import me.faun.givepet.GivePet;
 
 import java.io.File;
@@ -45,7 +46,8 @@ public class ConfigManager {
     public SettingsManager initSettings(String name, File config) {
         Class<? extends SettingsHolder> clazz = switch (name) {
                 case "messages" -> Messages.class;
-                default -> Config.class;
+                case "config" -> Config.class;
+                default -> null;
         };
 
         Path configFile = Path.of(config.getPath());
@@ -54,5 +56,10 @@ public class ConfigManager {
                 .configurationData(clazz)
                 .useDefaultMigrationService()
                 .create();
+    }
+
+    public Object getConfigValue(String config, Property<?> value) {
+        SettingsManager settingsManager = getConfig(config);
+        return settingsManager.getProperty(value);
     }
 }

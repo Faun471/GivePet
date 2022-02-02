@@ -1,5 +1,8 @@
 package me.faun.givepet;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import java.util.UUID;
 
 public class Request {
@@ -20,6 +23,14 @@ public class Request {
 
     public UUID getReceiver() {
         return receiver;
+    }
+
+    public Player getReceiverAsPlayer() {
+        return Bukkit.getPlayer(receiver);
+    }
+
+    public Player getSenderAsPlayer() {
+        return Bukkit.getPlayer(sender);
     }
 
     public String getAccepted() {

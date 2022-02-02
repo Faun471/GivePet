@@ -21,23 +21,23 @@ public final class GivePet extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        ConfigManager configManager = new ConfigManager();
+        configManager.reloadConfigs();
+
         SQLManager sqlManager = new SQLManager(this);
         requestsTable = sqlManager.createRequestsTable();
         logsTable = sqlManager.createLogsTable();
+        sqlManager.clearTable(requestsTable);
 
-        CommandManager commandManager = new CommandManager(this);
+        CommandManager commandManager = new CommandManager(this, true);
         commandManager.getMessageHandler().register("#cmd.no.permission", sender -> {
             StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.NO_PERMISSION));
         });
         commandManager.register(new GivePetCommand());
 
-        ConfigManager configManager = new ConfigManager();
-        configManager.reloadConfigs();
 
-        saveDefaultConfig();
 
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(),this);
-        sqlManager.clearTable(requestsTable);
     }
 
     @Override

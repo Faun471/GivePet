@@ -45,8 +45,6 @@ public class StringUtils {
 
         for (Component component : text.children()) {
             if (component.compact().style().color() != null) {
-                System.out.println(component.compact().style().color().asHexString()
-                        + ((TextComponent) component.compact()).content());
                 sb.append("&").append((component.compact()).style().color().asHexString())
                         .append(((TextComponent) component.compact()).content());
             } else {

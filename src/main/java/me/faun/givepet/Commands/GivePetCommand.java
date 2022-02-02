@@ -1,6 +1,7 @@
 package me.faun.givepet.Commands;
 
 import mc.obliviate.bloksqliteapi.sqlutils.*;
+import me.faun.givepet.Configs.Config;
 import me.faun.givepet.Configs.ConfigManager;
 import me.faun.givepet.Configs.Messages;
 import me.faun.givepet.GivePet;
@@ -9,7 +10,12 @@ import me.faun.givepet.Request;
 import me.faun.givepet.SQL.SQLManager;
 import me.faun.givepet.Utils.SQLUtils;
 import me.faun.givepet.Utils.StringUtils;
-import me.mattstudios.mf.annotations.*;
+import me.mattstudios.mf.annotations.Command;
+import me.mattstudios.mf.annotations.Completion;
+import me.mattstudios.mf.annotations.Default;
+import me.mattstudios.mf.annotations.SubCommand;
+import me.mattstudios.mf.annotations.Permission;
+import me.mattstudios.mf.annotations.NoPermission;
 import me.mattstudios.mf.base.CommandBase;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -24,6 +30,7 @@ import java.sql.ResultSet;
 public class GivePetCommand extends CommandBase implements Listener {
     PetManager petManager = new PetManager();
     SQLManager sqlManager = new SQLManager(GivePet.getInstance());
+    ConfigManager configManager = new ConfigManager();
     GivePet plugin = GivePet.getInstance();
     SQLTable requestsTable = plugin.getSqlTable();
     Request request;
@@ -43,18 +50,22 @@ public class GivePetCommand extends CommandBase implements Listener {
         }
 
         ResultSet resultSet = requestsTable.select("sender", sender.getUniqueId().toString());
-
-        String time = StringUtils.unixToDate(System.currentTimeMillis());
-        request = new Request(sender.getUniqueId(), receiver.getUniqueId(), time);
-
         if (SQLUtils.getStringFromResultSet(resultSet, "finished").equalsIgnoreCase("pending")) {
             StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.PENDING_REQUEST));
             return;
         }
 
+        String time = StringUtils.unixToDate(System.currentTimeMillis());
+        request = new Request(sender.getUniqueId(), receiver.getUniqueId(), time);
+
         sqlManager.createRow(requestsTable, new String[]{String.valueOf(sender.getUniqueId()), String.valueOf(receiver.getUniqueId()), time, "pending"}, "sender");
-        StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.GIVER_REQUEST_MESSAGE));
-        StringUtils.sendComponent(receiver, "&e" + StringUtils.getStringFromMessages(Messages.RECEIVER_REQUEST_MESSAGE));
+        StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.GIVER_REQUEST_MESSAGE)
+                .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
+                .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
+
+        StringUtils.sendComponent(receiver, "&e" + StringUtils.getStringFromMessages(Messages.RECEIVER_REQUEST_MESSAGE)
+                .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
+                .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
 
         BukkitTask runnable = new BukkitRunnable() {
             @Override
@@ -63,14 +74,20 @@ public class GivePetCommand extends CommandBase implements Listener {
                     case "accepted" -> {
                         sqlManager.logRequest(request.getSender().toString(), request.getReceiver().toString(), request.getTime(), "accepted");
                         requestsTable.delete(sender.getUniqueId().toString());
-                        StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.GIVER_REQUEST_ACCEPT));
+                        StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.GIVER_REQUEST_ACCEPT)
+                                .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
+                                .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
+
                         petManager.addPDC(sender, receiver.getName());
                         cancel();
                     }
                     case "rejected" -> {
                         sqlManager.logRequest(request.getSender().toString(), request.getReceiver().toString(), request.getTime(), "rejected");
                         requestsTable.delete(sender.getUniqueId().toString());
-                        StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.GIVER_REQUEST_REJECT));
+                        StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.GIVER_REQUEST_REJECT)
+                                .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
+                                .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
+
                         cancel();
                     }
                 }
@@ -78,7 +95,7 @@ public class GivePetCommand extends CommandBase implements Listener {
         }.runTaskTimerAsynchronously(GivePet.getInstance(), 20L, 20L);
 
         Bukkit.getScheduler().runTaskLater(GivePet.getInstance(), () -> {
-            if (runnable.isCancelled()) {
+            if (runnable.isCancelled() || sender.getPersistentDataContainer().isEmpty()) {
                 return;
             }
 
@@ -86,36 +103,53 @@ public class GivePetCommand extends CommandBase implements Listener {
             sqlManager.logRequest(request.getSender().toString(), request.getReceiver().toString(), request.getTime(), "expired");
             requestsTable.delete(sender.getUniqueId().toString());
 
-            StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.GIVER_REQUEST_EXPIRED));
-            StringUtils.sendComponent(receiver, StringUtils.getStringFromMessages(Messages.RECEIVER_REQUEST_EXPIRED));
-        }, 20L * 15);
+            StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.GIVER_REQUEST_EXPIRED)
+                    .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
+                    .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
+
+            StringUtils.sendComponent(receiver, StringUtils.getStringFromMessages(Messages.RECEIVER_REQUEST_EXPIRED)
+                    .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
+                    .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
+        }, 20L * ((int) configManager.getConfigValue("config", Config.REQUEST_TIME)));
     }
 
+    // TODO: 2/2/2022 Add Help Commands
     @SubCommand("help")
     public void helpCommand(CommandSender sender) {
-        StringUtils.sendComponent(sender, "&cPlz halp me!");
+        StringUtils.sendComponent(sender, "&cHelp command not implemented yet.");
     }
+
 
     @SubCommand("reject")
     public void rejectRequest(Player commandSender) {
         if (hasRequest(commandSender)) {
-            StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.NO_PENDING_REQUEST));
+            StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.NO_PENDING_REQUEST)
+                    .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
+                    .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
+
             return;
         }
 
         request.setAccepted("rejected");
-        StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.RECEIVER_REQUEST_REJECT));
+        StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.RECEIVER_REQUEST_REJECT)
+                .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
+                .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
     }
 
     @SubCommand("accept")
     public void acceptRequest(Player commandSender) {
         if (hasRequest(commandSender)) {
-            StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.NO_PENDING_REQUEST));
+            StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.NO_PENDING_REQUEST)
+                    .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
+                    .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
+
             return;
         }
 
         request.setAccepted("accepted");
-        StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.RECEIVER_REQUEST_ACCEPT));
+        StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.RECEIVER_REQUEST_ACCEPT)
+                .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
+                .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
     }
 
     @SubCommand("reload")
