@@ -1,12 +1,12 @@
-package me.faun.givepet.Listeners;
+package me.faun.givepet.listeners;
 
-import me.faun.givepet.Configs.Config;
-import me.faun.givepet.Configs.ConfigManager;
-import me.faun.givepet.Configs.Messages;
-import me.faun.givepet.Events.PetTransferEvent;
+import me.faun.givepet.configs.Config;
+import me.faun.givepet.configs.ConfigManager;
+import me.faun.givepet.configs.Messages;
+import me.faun.givepet.events.PetTransferEvent;
 import me.faun.givepet.GivePet;
 import me.faun.givepet.PetManager;
-import me.faun.givepet.Utils.StringUtils;
+import me.faun.givepet.utils.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sittable;
@@ -18,10 +18,9 @@ import org.bukkit.persistence.PersistentDataType;
 
 public class PlayerInteractListener implements Listener {
 
-    PetManager petManager = new PetManager();
-
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEntityEvent event) {
+        PetManager petManager = GivePet.getInstance().getPetManager();
         Player giver = event.getPlayer();
 
         if (!(event.getRightClicked() instanceof Tameable pet)) {
@@ -59,6 +58,7 @@ public class PlayerInteractListener implements Listener {
 
     private void transferPet(Tameable pet, Player giver, Player receiver) {
         ConfigManager configManager = new ConfigManager();
+        PetManager petManager = GivePet.getInstance().getPetManager();
 
         if ((boolean) configManager.getConfigValue("config", Config.PET_STAND) && (pet instanceof Sittable sittable && sittable.isSitting())) {
             sittable.setSitting(false);

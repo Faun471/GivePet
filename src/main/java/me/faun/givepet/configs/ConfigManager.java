@@ -1,4 +1,4 @@
-package me.faun.givepet.Configs;
+package me.faun.givepet.configs;
 
 import ch.jalu.configme.SettingsHolder;
 import ch.jalu.configme.SettingsManager;

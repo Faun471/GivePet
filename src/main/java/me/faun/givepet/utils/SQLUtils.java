@@ -1,4 +1,4 @@
-package me.faun.givepet.Utils;
+package me.faun.givepet.utils;
 
 import mc.obliviate.bloksqliteapi.sqlutils.SQLTable;
 import org.bukkit.entity.Player;

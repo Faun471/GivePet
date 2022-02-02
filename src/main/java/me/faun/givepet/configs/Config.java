@@ -1,4 +1,4 @@
-package me.faun.givepet.Configs;
+package me.faun.givepet.configs;
 
 import ch.jalu.configme.Comment;
 import ch.jalu.configme.SettingsHolder;
@@ -13,7 +13,7 @@ public final class Config implements SettingsHolder {
     }
     @Override
     public void registerComments(CommentsConfiguration config) {
-        config.setComment("",
+        config.setComment("", "\n",
                 " .88888.  oo                       888888ba             dP   " ,
                 "d8'   `88                          88    `8b            88   " ,
                 "88        dP dP   .dP .d8888b.    a88aaaa8P' .d8888b. d8888P " ,

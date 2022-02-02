@@ -1,12 +1,12 @@
 package me.faun.givepet;
 
 import mc.obliviate.bloksqliteapi.sqlutils.SQLTable;
-import me.faun.givepet.Commands.GivePetCommand;
-import me.faun.givepet.Configs.ConfigManager;
-import me.faun.givepet.Configs.Messages;
-import me.faun.givepet.Listeners.PlayerInteractListener;
-import me.faun.givepet.SQL.SQLManager;
-import me.faun.givepet.Utils.StringUtils;
+import me.faun.givepet.commands.GivePetCommand;
+import me.faun.givepet.configs.ConfigManager;
+import me.faun.givepet.configs.Messages;
+import me.faun.givepet.listeners.PlayerInteractListener;
+import me.faun.givepet.sql.SQLManager;
+import me.faun.givepet.utils.StringUtils;
 import me.mattstudios.mf.base.CommandManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,12 +14,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class GivePet extends JavaPlugin {
 
     private static GivePet instance;
+    private static PetManager petManager;
     private static SQLTable requestsTable;
     private static SQLTable logsTable;
 
     @Override
     public void onEnable() {
         instance = this;
+        petManager = new PetManager();
 
         ConfigManager configManager = new ConfigManager();
         configManager.reloadConfigs();
@@ -54,6 +56,10 @@ public final class GivePet extends JavaPlugin {
 
     public SQLTable getLogsTable() {
         return logsTable;
+    }
+
+    public PetManager getPetManager() {
+        return petManager;
     }
 
 

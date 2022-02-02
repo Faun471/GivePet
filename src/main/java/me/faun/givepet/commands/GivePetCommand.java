@@ -1,15 +1,14 @@
-package me.faun.givepet.Commands;
+package me.faun.givepet.commands;
 
 import mc.obliviate.bloksqliteapi.sqlutils.*;
-import me.faun.givepet.Configs.Config;
-import me.faun.givepet.Configs.ConfigManager;
-import me.faun.givepet.Configs.Messages;
+import me.faun.givepet.configs.Config;
+import me.faun.givepet.configs.ConfigManager;
+import me.faun.givepet.configs.Messages;
 import me.faun.givepet.GivePet;
-import me.faun.givepet.PetManager;
 import me.faun.givepet.Request;
-import me.faun.givepet.SQL.SQLManager;
-import me.faun.givepet.Utils.SQLUtils;
-import me.faun.givepet.Utils.StringUtils;
+import me.faun.givepet.sql.SQLManager;
+import me.faun.givepet.utils.SQLUtils;
+import me.faun.givepet.utils.StringUtils;
 import me.mattstudios.mf.annotations.Command;
 import me.mattstudios.mf.annotations.Completion;
 import me.mattstudios.mf.annotations.Default;
@@ -28,7 +27,6 @@ import java.sql.ResultSet;
 
 @Command("givepet")
 public class GivePetCommand extends CommandBase implements Listener {
-    PetManager petManager = new PetManager();
     SQLManager sqlManager = new SQLManager(GivePet.getInstance());
     ConfigManager configManager = new ConfigManager();
     GivePet plugin = GivePet.getInstance();
@@ -63,7 +61,7 @@ public class GivePetCommand extends CommandBase implements Listener {
                 .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
                 .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
 
-        StringUtils.sendComponent(receiver, "&e" + StringUtils.getStringFromMessages(Messages.RECEIVER_REQUEST_MESSAGE)
+        StringUtils.sendComponent(receiver, StringUtils.getStringFromMessages(Messages.RECEIVER_REQUEST_MESSAGE)
                 .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
                 .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
 
@@ -78,9 +76,10 @@ public class GivePetCommand extends CommandBase implements Listener {
                                 .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
                                 .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
 
-                        petManager.addPDC(sender, receiver.getName());
+                        GivePet.getInstance().getPetManager().addPDC(sender, receiver.getName());
                         cancel();
                     }
+
                     case "rejected" -> {
                         sqlManager.logRequest(request.getSender().toString(), request.getReceiver().toString(), request.getTime(), "rejected");
                         requestsTable.delete(sender.getUniqueId().toString());
@@ -126,7 +125,6 @@ public class GivePetCommand extends CommandBase implements Listener {
             StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.NO_PENDING_REQUEST)
                     .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
                     .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
-
             return;
         }
 
@@ -142,7 +140,6 @@ public class GivePetCommand extends CommandBase implements Listener {
             StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.NO_PENDING_REQUEST)
                     .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
                     .replace("%giver%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
-
             return;
         }
 

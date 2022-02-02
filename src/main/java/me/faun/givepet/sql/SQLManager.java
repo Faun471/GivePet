@@ -1,4 +1,4 @@
-package me.faun.givepet.SQL;
+package me.faun.givepet.sql;
 
 import mc.obliviate.bloksqliteapi.SQLHandler;
 import mc.obliviate.bloksqliteapi.sqlutils.DataType;

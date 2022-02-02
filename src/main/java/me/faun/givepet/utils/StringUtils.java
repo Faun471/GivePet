@@ -1,9 +1,9 @@
-package me.faun.givepet.Utils;
+package me.faun.givepet.utils;
 
 import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.properties.Property;
-import me.faun.givepet.Configs.ConfigManager;
-import me.faun.givepet.Configs.Messages;
+import me.faun.givepet.configs.ConfigManager;
+import me.faun.givepet.configs.Messages;
 import me.mattstudios.msg.adventure.AdventureMessage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;

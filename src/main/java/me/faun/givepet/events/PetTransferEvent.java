@@ -1,6 +1,5 @@
-package me.faun.givepet.Events;
+package me.faun.givepet.events;
 
-import me.faun.givepet.PetManager;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.Cancellable;
@@ -9,9 +8,6 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 public final class PetTransferEvent extends Event implements Cancellable {
-
-    PetManager petManager = new PetManager();
-
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
     private final Tameable pet;
