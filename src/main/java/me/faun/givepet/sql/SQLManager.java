@@ -50,7 +50,7 @@ public class SQLManager extends SQLHandler {
                 .putData("finished", values[3]));
     }
 
-    public void logRequest(String sender, String receiver, String time, String finished) {
+    public void logRequest(String sender, String receiver, long time, String finished) {
         SQLTable logsTable = GivePet.getInstance().getLogsTable();
         int id = logsTable.getSingleHighest("id") != null ? Integer.parseInt(logsTable.getSingleHighest("id")) + 1 : 1;
         logsTable.insert(logsTable.createUpdate("id")

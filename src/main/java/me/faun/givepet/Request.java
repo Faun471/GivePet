@@ -8,10 +8,10 @@ import java.util.UUID;
 public class Request {
     private final UUID sender;
     private final UUID receiver;
-    private String accepted = "pending";
-    private final String time;
+    private boolean accepted;
+    private final long time;
 
-    public Request(UUID sender, UUID receiver, String time) {
+    public Request(UUID sender, UUID receiver, long time) {
         this.sender = sender;
         this.receiver = receiver;
         this.time = time;
@@ -33,15 +33,15 @@ public class Request {
         return Bukkit.getPlayer(sender);
     }
 
-    public String getAccepted() {
+    public boolean getAccepted() {
         return accepted;
     }
 
-    public void setAccepted(String accepted) {
+    public void setAccepted(boolean accepted) {
         this.accepted = accepted;
     }
 
-    public String getTime() {
+    public long getTime() {
         return time;
     }
 }

@@ -8,9 +8,6 @@ import ch.jalu.configme.properties.IntegerProperty;
 import ch.jalu.configme.properties.Property;
 
 public final class Config implements SettingsHolder {
-    public Config() {
-
-    }
     @Override
     public void registerComments(CommentsConfiguration config) {
         config.setComment("", "\n",

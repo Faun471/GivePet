@@ -1,6 +1,5 @@
 package me.faun.givepet.utils;
 
-import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.properties.Property;
 import me.faun.givepet.configs.ConfigManager;
 import me.faun.givepet.configs.Messages;
@@ -9,12 +8,13 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class StringUtils {
-    public static String unixToDate(long unix) {
+    public static @NotNull String unixToDate(long unix) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return simpleDateFormat.format(new Date(unix));
     }
@@ -25,10 +25,11 @@ public class StringUtils {
      *  @param text     The text to parse.
      *  @return         The result of the parsed text.
      */
-    public static Component messageParse(String text) {
+    public static @NotNull Component messageParse(@NotNull String text) {
         final AdventureMessage message = AdventureMessage.create();
+        ConfigManager configManager = new ConfigManager();
 
-        return message.parse(text.replace("%prefix%", getStringFromMessages(Messages.PREFIX)));
+        return message.parse(text.replace("%prefix%", configManager.getStringFromMessages(Messages.PREFIX)));
     }
 
     /**
@@ -37,7 +38,7 @@ public class StringUtils {
      * @param text      The Component to convert into String.
      * @return          The converted Component
      */
-    public static String componentToString(Component text) {
+    public static @NotNull String componentToString(@NotNull Component text) {
         StringBuilder sb = new StringBuilder();
         if (text.children().isEmpty()) {
             sb.append(((TextComponent) text.compact()).content());
@@ -60,7 +61,7 @@ public class StringUtils {
      *  @param player   The player that will receive the message.
      *  @param message  The message that will be sent to the player.
      */
-    public static void sendComponent(Player player, Property<String> message) {
+    public static void sendComponent(@NotNull Player player, @NotNull Property<String> message) {
         player.sendMessage(messageParse(message.toString()));
     }
 
@@ -78,26 +79,23 @@ public class StringUtils {
      *  This will send a Component to a player
      *
      *  @param player   The player that will receive the message.
-     *  @param message  The message that will be sent to the player.
+     *  @param messages  The message that will be sent to the player.
      */
-    public static void sendComponent(Player player, String message) {
-        player.sendMessage(messageParse(message));
+    public static void sendComponent(Player player, String @NotNull ... messages) {
+        for (String message : messages) {
+            player.sendMessage(messageParse(message));
+        }
     }
 
     /**
      *  This will send a Component to a player
      *
      *  @param sender   The CommandSender that will receive the message.
-     *  @param message  The message that will be sent to the command sender.
+     *  @param messages  The message that will be sent to the command sender.
      */
-    public static void sendComponent(CommandSender sender, String message) {
-        sender.sendMessage(messageParse(message));
+    public static void sendComponent(CommandSender sender, String @NotNull ... messages) {
+        for (String message : messages) {
+            sender.sendMessage(messageParse(message));
+        }
     }
-
-    public static String getStringFromMessages(Property<String> property) {
-        ConfigManager configManager = new ConfigManager();
-        SettingsManager settingsManager = configManager.getConfig("messages");
-        return settingsManager.getProperty(property);
-    }
-
 }

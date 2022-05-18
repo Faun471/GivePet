@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 
 public class ConfigManager {
-    private final HashMap<String, SettingsManager> configs;
+    private final HashMap<Configs, SettingsManager> configs;
 
     public ConfigManager() {
         this.configs = new HashMap<>();
@@ -19,11 +19,11 @@ public class ConfigManager {
 
     public void reloadConfigs() {
         configs.clear();
-        loadConfig("messages");
-        loadConfig("config");
+        loadConfig(Configs.MESSAGES);
+        loadConfig(Configs.CONFIG);
     }
 
-    public SettingsManager getConfig(String name) {
+    public SettingsManager getConfig(Configs name) {
         if (!configs.containsKey(name)) {
             loadConfig(name);
         }
@@ -31,7 +31,7 @@ public class ConfigManager {
         return configs.get(name);
     }
 
-    public void loadConfig(String name) {
+    public void loadConfig(Configs name) {
         String fileName = name + ".yml";
         File file = new File(GivePet.getInstance().getDataFolder(), fileName);
 
@@ -43,11 +43,10 @@ public class ConfigManager {
         configs.put(name, settingsManager);
     }
 
-    public SettingsManager initSettings(String name, File config) {
+    public SettingsManager initSettings(Configs name, File config) {
         Class<? extends SettingsHolder> clazz = switch (name) {
-                case "messages" -> Messages.class;
-                case "config" -> Config.class;
-                default -> null;
+            case MESSAGES -> Messages.class;
+            case CONFIG -> Config.class;
         };
 
         Path configFile = Path.of(config.getPath());
@@ -58,8 +57,15 @@ public class ConfigManager {
                 .create();
     }
 
-    public Object getConfigValue(String config, Property<?> value) {
+    public Object getConfigValue(Configs config, Property<?> value) {
         SettingsManager settingsManager = getConfig(config);
         return settingsManager.getProperty(value);
     }
+
+    public String getStringFromMessages(Property<String> property) {
+        ConfigManager configManager = new ConfigManager();
+        SettingsManager settingsManager = configManager.getConfig(Configs.MESSAGES);
+        return settingsManager.getProperty(property);
+    }
 }
+

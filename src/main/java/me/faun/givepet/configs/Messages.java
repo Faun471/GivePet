@@ -6,10 +6,6 @@ import ch.jalu.configme.properties.Property;
 import ch.jalu.configme.properties.StringProperty;
 
 public final class Messages implements SettingsHolder {
-    public Messages() {
-
-    }
-
     @Override
     public void registerComments(CommentsConfiguration config) {
         config.setComment("",
@@ -60,6 +56,4 @@ public final class Messages implements SettingsHolder {
     public static final Property<String> GIVER_REQUEST_REJECT = new StringProperty("sender-reject-request", "%prefix% &f%receiver% rejected the request.");
 
     public static final Property<String> RECEIVER_REQUEST_REJECT = new StringProperty("receiver-reject-request", "%prefix% &fYou rejected %giver%'s request.");
-
-
 }

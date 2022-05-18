@@ -1,24 +1,16 @@
-package me.faun.givepet;
+package me.faun.givepet.utils;
 
+import me.faun.givepet.GivePet;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-public class PetManager {
+public class PetUtils {
+    private static final NamespacedKey key = new NamespacedKey(GivePet.getInstance(), "give-pet");
 
-    private final NamespacedKey key = new NamespacedKey(GivePet.getInstance(),"give-pet");
-
-    public PetManager() {
-
-    }
-
-    public NamespacedKey getKey() {
-        return key;
-    }
-
-    public void addPDC(Player giver, String arg) {
+    public static void addPDC(Player giver, String arg) {
         PersistentDataContainer pdc = giver.getPersistentDataContainer();
         pdc.set(key, PersistentDataType.STRING, arg);
 
@@ -32,9 +24,13 @@ public class PetManager {
         }, 20L * 15);
     }
 
-    public void removePDC(Player player, NamespacedKey key) {
+    public static void removePDC(Player player) {
         if (player.getPersistentDataContainer().has(key, PersistentDataType.STRING)) {
             player.getPersistentDataContainer().remove(key);
         }
+    }
+
+    public static NamespacedKey getKey() {
+        return key;
     }
 }

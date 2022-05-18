@@ -35,15 +35,15 @@ public final class PetTransferEvent extends Event implements Cancellable {
         return handlers;
     }
 
-    public Tameable getPet() {
+    public @NotNull Tameable getPet() {
         return pet;
     }
 
-    public Player getGiver() {
+    public @NotNull Player getGiver() {
         return giver;
     }
 
-    public Player getReceiver() {
+    public @NotNull Player getReceiver() {
         return receiver;
     }
 }
