@@ -39,23 +39,25 @@ public final class Messages implements SettingsHolder {
 
     public static final Property<String> CANNOT_TRANSFER_SELF = new StringProperty("cannot-transfer-self", "%prefix% &cYou can't transfer a pet to yourself!");
 
-    public static final Property<String> GIVER_REQUEST_MESSAGE = new StringProperty("giver-request-message", "%prefix% &fYou sent %receiver% a request.");
+    public static final Property<String> SENDER_REQUEST_MESSAGE = new StringProperty("sender-request-message", "%prefix% &fYou sent %receiver% a request.");
 
     public static final Property<String> RECEIVER_REQUEST_MESSAGE = new StringProperty("receiver-request-message", "%prefix% &f%sender% wants to give you a pet! &7[[&aAccept&7]](hover: &fClick to accept.|command:/givepet accept)  &7[[&cReject&7]](hover: &fClick to reject.|command:/givepet reject)");
 
-    public static final Property<String> GIVER_REQUEST_EXPIRED = new StringProperty("giver-request-expired", "%prefix% &c%receiver% did not accept in time.");
+    public static final Property<String> SENDER_REQUEST_EXPIRED = new StringProperty("sender-request-expired", "%prefix% &c%receiver% did not accept in time.");
 
     public static final Property<String> RECEIVER_REQUEST_EXPIRED = new StringProperty("receiver-request-expired", "%prefix% &cRequest expired.");
 
-    public static final Property<String> PENDING_REQUEST = new StringProperty("pending-request", "%prefix% &cYou still have an active request with a player!");
+    public static final Property<String> RECEIVER_PENDING_REQUEST = new StringProperty("receiver-pending-request", "%prefix% &cThat player has an active request with another player!");
+    
+    public static final Property<String> SENDER_PENDING_REQUEST = new StringProperty("pending-request", "%prefix% &cYou still have an active request with a player!");
 
     public static final Property<String> NO_PENDING_REQUEST = new StringProperty("no-pending-request", "%prefix% &cNo one sent you a request.");
 
-    public static final Property<String> GIVER_REQUEST_ACCEPT = new StringProperty("sender-accept-request", "%prefix% &f%receiver% accepted the request.\nRight click the pet that you'd like to give");
+    public static final Property<String> SENDER_REQUEST_ACCEPT = new StringProperty("sender-accept-request", "%prefix% &f%receiver% accepted the request.\nRight click the pet that you'd like to give");
 
     public static final Property<String> RECEIVER_REQUEST_ACCEPT = new StringProperty("receiver-accept-request", "%prefix% &fYou accepted %sender%'s request.");
 
-    public static final Property<String> GIVER_REQUEST_REJECT = new StringProperty("sender-reject-request", "%prefix% &f%receiver% rejected the request.");
+    public static final Property<String> SENDER_REQUEST_REJECT = new StringProperty("sender-reject-request", "%prefix% &f%receiver% rejected the request.");
 
     public static final Property<String> RECEIVER_REQUEST_REJECT = new StringProperty("receiver-reject-request", "%prefix% &fYou rejected %sender%'s request.");
 

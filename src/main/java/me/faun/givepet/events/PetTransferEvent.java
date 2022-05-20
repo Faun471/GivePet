@@ -7,16 +7,19 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.logging.Handler;
+
 public final class PetTransferEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
+
     private final Tameable pet;
-    private final Player giver;
+    private final Player sender;
     private final Player receiver;
 
     public PetTransferEvent(@NotNull Tameable pet, @NotNull Player giver , @NotNull Player receiver) {
         this.pet = pet;
-        this.giver = giver;
+        this.sender = giver;
         this.receiver = receiver;
     }
 
@@ -39,11 +42,15 @@ public final class PetTransferEvent extends Event implements Cancellable {
         return pet;
     }
 
-    public @NotNull Player getGiver() {
-        return giver;
+    public @NotNull Player getSender() {
+        return sender;
     }
 
     public @NotNull Player getReceiver() {
         return receiver;
+    }
+
+    public static @NotNull HandlerList getHandlerList() {
+        return handlers;
     }
 }

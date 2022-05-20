@@ -16,12 +16,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerInteractListener implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerInteractEvent(PlayerInteractEntityEvent event) {
-        ConfigManager configManager = new ConfigManager();
         Player giver = event.getPlayer();
 
         if (!(event.getRightClicked() instanceof Tameable pet)) {
@@ -76,7 +76,5 @@ public class PlayerInteractListener implements Listener {
         StringUtils.sendComponent(receiver, StringUtils.getStringFromMessages(Messages.RECEIVE_PET_SUCCESS)
                 .replace("%receiver%", StringUtils.componentToString(receiver.displayName()))
                 .replace("%sender%", StringUtils.componentToString(giver.displayName())));
-
     }
-
 }

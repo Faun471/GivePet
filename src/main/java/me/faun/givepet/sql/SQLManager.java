@@ -28,7 +28,7 @@ public class SQLManager extends SQLHandler {
                 .addField("id", DataType.INTEGER, true, true, true)
                 .addField("sender", DataType.TEXT)
                 .addField("receiver", DataType.TEXT)
-                .addField("time", DataType.TEXT)
+                .addField("time", DataType.INTEGER)
                 .addField("finished", DataType.TEXT);
         return sqlTable.create();
     }
@@ -37,12 +37,12 @@ public class SQLManager extends SQLHandler {
         final SQLTable sqlTable = new SQLTable("requests", "sender")
                 .addField("sender", DataType.TEXT, true, true, true)
                 .addField("receiver", DataType.TEXT, true, false, false)
-                .addField("time", DataType.TEXT, true, false, false)
+                .addField("time", DataType.INTEGER, true, false, false)
                 .addField("finished", DataType.TEXT, true, false, false);
         return sqlTable.create();
     }
 
-    public void createRow(SQLTable sqlTable, String[] values, String id) {
+    public void createRow(SQLTable sqlTable, String id, String... values) {
         sqlTable.insert(sqlTable.createUpdate(id)
                 .putData("sender", values[0])
                 .putData("receiver", values[1])
