@@ -1,6 +1,7 @@
 package me.faun.givepet.utils;
 
 import me.faun.givepet.GivePet;
+import me.faun.givepet.configs.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -20,6 +21,7 @@ public class PetUtils {
             }
 
             pdc.remove(key);
+            StringUtils.sendComponent(giver, Messages.TAME_EXPIRE);
             giver.sendMessage("timer expired.");
         }, 20L * 15);
     }

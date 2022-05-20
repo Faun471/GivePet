@@ -34,7 +34,7 @@ public class PlayerInteractListener implements Listener {
 
         if (pet.isTamed() && pet.getOwnerUniqueId() != null && !pet.getOwnerUniqueId().equals(giver.getUniqueId())) {
             PetUtils.removePDC(giver);
-            StringUtils.sendComponent(giver, configManager.getStringFromMessages(Messages.NOT_YOUR_PET));
+            StringUtils.sendComponent(giver, StringUtils.getStringFromMessages(Messages.NOT_YOUR_PET));
         }
 
         Player receiver = Bukkit.getPlayer(giver.getPersistentDataContainer().get(PetUtils.getKey(), PersistentDataType.STRING));
@@ -69,13 +69,13 @@ public class PlayerInteractListener implements Listener {
         PetUtils.removePDC(giver);
         pet.setOwner(receiver);
 
-        StringUtils.sendComponent(giver, configManager.getStringFromMessages(Messages.GIVE_PET_SUCCESS)
+        StringUtils.sendComponent(giver, StringUtils.getStringFromMessages(Messages.GIVE_PET_SUCCESS)
                 .replace("%receiver%", StringUtils.componentToString(receiver.displayName()))
-                .replace("%giver%", StringUtils.componentToString(giver.displayName())));
+                .replace("%sender%", StringUtils.componentToString(giver.displayName())));
 
-        StringUtils.sendComponent(receiver, configManager.getStringFromMessages(Messages.RECEIVE_PET_SUCCESS)
+        StringUtils.sendComponent(receiver, StringUtils.getStringFromMessages(Messages.RECEIVE_PET_SUCCESS)
                 .replace("%receiver%", StringUtils.componentToString(receiver.displayName()))
-                .replace("%giver%", StringUtils.componentToString(giver.displayName())));
+                .replace("%sender%", StringUtils.componentToString(giver.displayName())));
 
     }
 

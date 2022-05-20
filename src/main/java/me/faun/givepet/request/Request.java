@@ -1,4 +1,4 @@
-package me.faun.givepet;
+package me.faun.givepet.request;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -8,7 +8,7 @@ import java.util.UUID;
 public class Request {
     private final UUID sender;
     private final UUID receiver;
-    private boolean accepted;
+    private State accepted;
     private final long time;
 
     public Request(UUID sender, UUID receiver, long time) {
@@ -33,15 +33,15 @@ public class Request {
         return Bukkit.getPlayer(sender);
     }
 
-    public boolean getAccepted() {
+    public long getTime() {
+        return time;
+    }
+
+    public State getAccepted() {
         return accepted;
     }
 
-    public void setAccepted(boolean accepted) {
+    public void setAccepted(State accepted) {
         this.accepted = accepted;
-    }
-
-    public long getTime() {
-        return time;
     }
 }
