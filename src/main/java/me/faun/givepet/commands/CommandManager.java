@@ -9,9 +9,10 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 public class CommandManager {
-    private static final HashMap<String, Command> commands = new HashMap<>();
+    private static final HashMap<String, Command> commands = loadCommands();
 
-    public static void loadCommands() {
+    public static HashMap<String, Command> loadCommands() {
+        HashMap<String, Command> commands = new HashMap<>();
         for (Method method : GivePetCommand.class.getDeclaredMethods()) {
             if (method.getAnnotations().length == 0) {
                 break;
@@ -21,6 +22,7 @@ public class CommandManager {
             String[] alias = new String[]{};
             String commandDescription = null;
             String commandPermission = null;
+            String commandUsage = "/" + name;
 
             for (Annotation annotation : method.getAnnotations()) {
                 if (annotation instanceof SubCommand command) {
@@ -35,10 +37,15 @@ public class CommandManager {
                 if (annotation instanceof Permission permission) {
                     commandPermission = permission.value();
                 }
+
+                if (annotation instanceof Usage usage) {
+                    commandUsage = usage.value();
+                }
             }
 
-            commands.put(name, new Command(name, alias, commandDescription, commandPermission));
+            commands.put(name, new Command(name, alias, commandDescription, commandPermission, commandUsage));
         }
+        return commands;
     }
 
     public static HashMap<String, Command> getCommands() {

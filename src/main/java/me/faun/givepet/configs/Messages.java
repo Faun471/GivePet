@@ -25,7 +25,7 @@ public final class Messages implements SettingsHolder {
 
     public static final Property<String> PLAYER_NOT_ONLINE = new StringProperty("player-not-online", "%prefix% &fThat player is not online.");
 
-    public static final Property<String> RELOAD_SUCCESS = new StringProperty("reload-success", "%prefix% &aSuccessfully reloaded the plugin.");
+    public static final Property<String> RELOAD_SUCCESS = new StringProperty("reload-success", "%prefix% &aSuccessfully reloaded the plugin in %time% ms.");
 
     public static final Property<String> NO_PERMISSION = new StringProperty("no-permission", "%prefix% &cYou do not have permission to run this command!");
 
@@ -62,6 +62,6 @@ public final class Messages implements SettingsHolder {
     public static final Property<String> UNKNOWN_COMMAND = new StringProperty("unknown-command", "%prefix% &cUnknown command. Please do &a/givepet help &cfor available commands.");
 
     public static final Property<String> HELP_HEADER = new StringProperty("help-header", "<g:#ec9f05:#ff4e00>=========== %prefix% commands list<g:#ff4e00:#ec9f05> ==========");
-    public static final Property<String> HELP_COMMAND = new StringProperty("help-command", "[%command%](hover: Click to suggest the &a%command%&f command.|suggest: /givepet %command%) - %description%");
-    public static final Property<String> HELP_FOOTER = new StringProperty("help-footer", "<g:#ec9f05:#ff4e00>======================================== ");
+    public static final Property<String> HELP_COMMAND = new StringProperty("help-command", "[%usage%](hover: Click to suggest the &a%command%&f command.|suggest: /givepet %command%) - %description%");
+    public static final Property<String> HELP_FOOTER = new StringProperty("help-footer", "<g:#ec9f05:#ff4e00>============================================");
 }

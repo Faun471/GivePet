@@ -39,6 +39,7 @@ class GivePetCommand extends BaseCommand {
 
     @SubCommand("request")
     @Description("Send a request to another player.")
+    @Usage("/givepet request [player]")
     public void requestCommand(Player sender, @Suggestion("#players") Player receiver) {
         if (receiver == null) {
             StringUtils.sendComponent(sender, Messages.PLAYER_NOT_ONLINE);
@@ -98,13 +99,15 @@ class GivePetCommand extends BaseCommand {
 
     @SubCommand("help")
     @Description("Do you seriously need to know this command's description?")
-    public void helpCommand(CommandSender sender, @Optional String arg) {
+    @Usage("/givepet help <command>")
+    public void helpCommand(CommandSender sender, @Suggestion("#help") @Optional String arg) {
         HashMap<String, Command> commands = CommandManager.getCommands();
 
         if (commands.containsKey(arg)) {
             StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.HELP_COMMAND)
                     .replace("%command%", arg)
-                    .replace("%description%", commands.get(arg).description()));
+                    .replace("%description%", commands.get(arg).description())
+                    .replace("%usage%", commands.get(arg).usage()));
             return;
         }
 
@@ -112,7 +115,8 @@ class GivePetCommand extends BaseCommand {
         for (String command : commands.keySet()) {
             StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.HELP_COMMAND)
                     .replace("%command%", command)
-                    .replace("%description%", commands.get(command).description()));
+                    .replace("%description%", commands.get(command).description())
+                    .replace("%usage%", commands.get(command).usage()));
         }
         StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.HELP_FOOTER));
 
@@ -120,6 +124,7 @@ class GivePetCommand extends BaseCommand {
 
     @SubCommand("reject")
     @Description("Reject an incoming request.")
+    @Usage("/givepet reject")
     public void rejectRequest(Player commandSender) {
         if (!hasRequest(commandSender)) {
             StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.NO_PENDING_REQUEST));
@@ -147,6 +152,7 @@ class GivePetCommand extends BaseCommand {
 
     @SubCommand("accept")
     @Description("Accept an incoming request.")
+    @Usage("/givepet accept")
     public void acceptRequest(Player player) {
         if (!hasRequest(player)) {
             StringUtils.sendComponent(player, StringUtils.getStringFromMessages(Messages.NO_PENDING_REQUEST));
@@ -155,7 +161,6 @@ class GivePetCommand extends BaseCommand {
 
         Request request = requests.get(player);
         request.setAccepted(State.ACCEPTED);
-
         sqlManager.logRequest(request.getSender().toString(), request.getReceiver().toString(), request.getTime(), "accepted");
         requestsTable.delete(request.getSenderAsPlayer().getUniqueId().toString());
         StringUtils.sendComponent(request.getSenderAsPlayer(), StringUtils.getStringFromMessages(Messages.GIVER_REQUEST_ACCEPT)
@@ -163,8 +168,6 @@ class GivePetCommand extends BaseCommand {
                 .replace("%sender%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
 
         PetUtils.addPDC(request.getSenderAsPlayer(), request.getReceiverAsPlayer().getName());
-
-
 
         StringUtils.sendComponent(player, StringUtils.getStringFromMessages(Messages.RECEIVER_REQUEST_ACCEPT)
                 .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
@@ -175,18 +178,22 @@ class GivePetCommand extends BaseCommand {
     @SubCommand("reload")
     @Permission("givepet.reload")
     @Description("Reloads the plugin.")
+    @Usage("/givepet reload")
     public void reload(CommandSender commandSender) {
         ConfigManager configManager = new ConfigManager();
+        long time = System.currentTimeMillis();
         configManager.reloadConfigs();
-        StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.RELOAD_SUCCESS));
+        time -= System.currentTimeMillis();
+        StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.RELOAD_SUCCESS)
+                .replace("%time%", String.valueOf(time)));
     }
 
     private boolean hasRequest(Player commandSender) {
-        if (!requests.containsKey(commandSender)) {
-            return false;
+        if (requests.containsKey(commandSender)) {
+            return true;
         }
 
         ResultSet resultSet = requestsTable.select("receiver", commandSender.getUniqueId().toString());
-        return !SQLUtils.getStringFromResultSet(resultSet, "receiver").equalsIgnoreCase("null");
+        return SQLUtils.getStringFromResultSet(resultSet, "receiver").equalsIgnoreCase("null");
     }
 }

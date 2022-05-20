@@ -5,6 +5,7 @@ import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
 import dev.triumphteam.cmd.core.message.MessageKey;
 import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
 import mc.obliviate.bloksqliteapi.sqlutils.SQLTable;
+import me.faun.givepet.commands.CommandManager;
 import me.faun.givepet.commands.GivePetCommand;
 import me.faun.givepet.configs.ConfigManager;
 import me.faun.givepet.configs.Messages;
@@ -40,7 +41,7 @@ public final class GivePet extends JavaPlugin {
 
         BukkitCommandManager<CommandSender> bukkitCommandManager = BukkitCommandManager.create(this);
         bukkitCommandManager.registerSuggestion(SuggestionKey.of("#players"), (sender, context) -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toList());
-        bukkitCommandManager.registerSuggestion(SuggestionKey.of("#help"), (sender, context) -> List.of("accept", "help", "reject", "reload"));
+        bukkitCommandManager.registerSuggestion(SuggestionKey.of("#help"), (sender, context) -> CommandManager.getCommands().keySet().stream().toList());
         bukkitCommandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, ((sender, context) -> StringUtils.sendComponent(sender, Messages.UNKNOWN_COMMAND)));
         bukkitCommandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, ((sender, context) -> StringUtils.sendComponent(sender, Messages.NO_PERMISSION)));
         bukkitCommandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, ((sender, context) -> StringUtils.sendComponent(sender, Messages.NO_PERMISSION)));
