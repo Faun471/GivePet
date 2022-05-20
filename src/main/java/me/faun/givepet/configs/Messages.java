@@ -31,15 +31,17 @@ public final class Messages implements SettingsHolder {
 
     public static final Property<String> GIVE_PET_SUCCESS = new StringProperty("give-pet-success", "%prefix% &fSuccessfully gave %receiver% your pet!");
 
-    public static final Property<String> RECEIVE_PET_SUCCESS = new StringProperty("receive-pet-success", "%prefix% &f%giver% gave you their pet.");
+    public static final Property<String> RECEIVE_PET_SUCCESS = new StringProperty("receive-pet-success", "%prefix% &f%sender% gave you their pet.");
 
     public static final Property<String> NOT_YOUR_PET = new StringProperty("not-your-pet", "%prefix% &cThat's not your pet.");
+
+    public static final Property<String> TAME_EXPIRE = new StringProperty("tame-expire", "%prefix% &cTimer expired. You did not right click your pet in time!");
 
     public static final Property<String> CANNOT_TRANSFER_SELF = new StringProperty("cannot-transfer-self", "%prefix% &cYou can't transfer a pet to yourself!");
 
     public static final Property<String> GIVER_REQUEST_MESSAGE = new StringProperty("giver-request-message", "%prefix% &fYou sent %receiver% a request.");
 
-    public static final Property<String> RECEIVER_REQUEST_MESSAGE = new StringProperty("receiver-request-message", "%prefix% &f%giver% wants to give you a pet! &7[[&aAccept&7]](hover: &fClick to accept.|command:/givepet accept)  &7[[&cReject&7]](hover: &fClick to reject.|command:/givepet reject)");
+    public static final Property<String> RECEIVER_REQUEST_MESSAGE = new StringProperty("receiver-request-message", "%prefix% &f%sender% wants to give you a pet! &7[[&aAccept&7]](hover: &fClick to accept.|command:/givepet accept)  &7[[&cReject&7]](hover: &fClick to reject.|command:/givepet reject)");
 
     public static final Property<String> GIVER_REQUEST_EXPIRED = new StringProperty("giver-request-expired", "%prefix% &c%receiver% did not accept in time.");
 
@@ -51,9 +53,15 @@ public final class Messages implements SettingsHolder {
 
     public static final Property<String> GIVER_REQUEST_ACCEPT = new StringProperty("sender-accept-request", "%prefix% &f%receiver% accepted the request.\nRight click the pet that you'd like to give");
 
-    public static final Property<String> RECEIVER_REQUEST_ACCEPT = new StringProperty("receiver-accept-request", "%prefix% &fYou accepted %giver%'s request.");
+    public static final Property<String> RECEIVER_REQUEST_ACCEPT = new StringProperty("receiver-accept-request", "%prefix% &fYou accepted %sender%'s request.");
 
     public static final Property<String> GIVER_REQUEST_REJECT = new StringProperty("sender-reject-request", "%prefix% &f%receiver% rejected the request.");
 
-    public static final Property<String> RECEIVER_REQUEST_REJECT = new StringProperty("receiver-reject-request", "%prefix% &fYou rejected %giver%'s request.");
+    public static final Property<String> RECEIVER_REQUEST_REJECT = new StringProperty("receiver-reject-request", "%prefix% &fYou rejected %sender%'s request.");
+
+    public static final Property<String> UNKNOWN_COMMAND = new StringProperty("unknown-command", "%prefix% &cUnknown command. Please do &a/givepet help &cfor available commands.");
+
+    public static final Property<String> HELP_HEADER = new StringProperty("help-header", "<g:#ec9f05:#ff4e00>=========== %prefix% commands list<g:#ff4e00:#ec9f05> ==========");
+    public static final Property<String> HELP_COMMAND = new StringProperty("help-command", "[%command%](hover: Click to suggest the &a%command%&f command.|suggest: /givepet %command%) - %description%");
+    public static final Property<String> HELP_FOOTER = new StringProperty("help-footer", "<g:#ec9f05:#ff4e00>======================================== ");
 }
