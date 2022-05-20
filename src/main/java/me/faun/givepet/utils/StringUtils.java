@@ -1,7 +1,9 @@
 package me.faun.givepet.utils;
 
+import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.properties.Property;
 import me.faun.givepet.configs.ConfigManager;
+import me.faun.givepet.configs.Configs;
 import me.faun.givepet.configs.Messages;
 import me.mattstudios.msg.adventure.AdventureMessage;
 import net.kyori.adventure.text.Component;
@@ -27,9 +29,8 @@ public class StringUtils {
      */
     public static @NotNull Component messageParse(@NotNull String text) {
         final AdventureMessage message = AdventureMessage.create();
-        ConfigManager configManager = new ConfigManager();
 
-        return message.parse(text.replace("%prefix%", configManager.getStringFromMessages(Messages.PREFIX)));
+        return message.parse(text.replace("%prefix%", StringUtils.getStringFromMessages(Messages.PREFIX)));
     }
 
     /**
@@ -62,7 +63,7 @@ public class StringUtils {
      *  @param message  The message that will be sent to the player.
      */
     public static void sendComponent(@NotNull Player player, @NotNull Property<String> message) {
-        player.sendMessage(messageParse(message.toString()));
+        player.sendMessage(messageParse(getStringFromMessages(message)));
     }
 
     /**
@@ -72,7 +73,7 @@ public class StringUtils {
      *  @param message  The message that will be sent to the command sender.
      */
     public static void sendComponent(CommandSender sender, Property<String> message) {
-        sender.sendMessage(messageParse(message.toString()));
+        sender.sendMessage(messageParse(getStringFromMessages(message)));
     }
 
     /**
@@ -97,5 +98,11 @@ public class StringUtils {
         for (String message : messages) {
             sender.sendMessage(messageParse(message));
         }
+    }
+
+    public static String getStringFromMessages(Property<String> property) {
+        ConfigManager configManager = new ConfigManager();
+        SettingsManager settingsManager = configManager.getConfig(Configs.MESSAGES);
+        return settingsManager.getProperty(property);
     }
 }

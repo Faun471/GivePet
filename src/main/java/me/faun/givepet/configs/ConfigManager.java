@@ -5,6 +5,7 @@ import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.SettingsManagerBuilder;
 import ch.jalu.configme.properties.Property;
 import me.faun.givepet.GivePet;
+import me.faun.givepet.commands.CommandManager;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -60,12 +61,6 @@ public class ConfigManager {
     public Object getConfigValue(Configs config, Property<?> value) {
         SettingsManager settingsManager = getConfig(config);
         return settingsManager.getProperty(value);
-    }
-
-    public String getStringFromMessages(Property<String> property) {
-        ConfigManager configManager = new ConfigManager();
-        SettingsManager settingsManager = configManager.getConfig(Configs.MESSAGES);
-        return settingsManager.getProperty(property);
     }
 }
 
