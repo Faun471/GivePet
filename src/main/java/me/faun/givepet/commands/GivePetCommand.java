@@ -99,7 +99,7 @@ class GivePetCommand extends BaseCommand {
     @SubCommand("help")
     @Description("Do you seriously need to know this command's description?")
     public void helpCommand(CommandSender sender, @Optional String arg) {
-        HashMap<String, Command> commands = new CommandManager().getCommands();
+        HashMap<String, Command> commands = CommandManager.getCommands();
 
         if (commands.containsKey(arg)) {
             StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.HELP_COMMAND)
