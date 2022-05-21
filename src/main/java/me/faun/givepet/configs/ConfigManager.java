@@ -5,7 +5,6 @@ import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.SettingsManagerBuilder;
 import ch.jalu.configme.properties.Property;
 import me.faun.givepet.GivePet;
-import me.faun.givepet.commands.CommandManager;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -33,7 +32,7 @@ public class ConfigManager {
     }
 
     public void loadConfig(Configs name) {
-        String fileName = name + ".yml";
+        String fileName = name.name().toLowerCase() + ".yml";
         File file = new File(GivePet.getInstance().getDataFolder(), fileName);
 
         if (!file.exists()) {

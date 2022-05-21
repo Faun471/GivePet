@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class CommandManager {
     private static final HashMap<String, Command> commands = loadCommands();
 
-    private static HashMap<String, Command> loadCommands() {
+    private static @NotNull HashMap<String, Command> loadCommands() {
         HashMap<String, Command> commands = new HashMap<>();
         for (Method method : GivePetCommand.class.getDeclaredMethods()) {
             if (method.getAnnotations().length == 0) {

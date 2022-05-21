@@ -8,17 +8,17 @@ import ch.jalu.configme.properties.StringProperty;
 public final class Messages implements SettingsHolder {
     @Override
     public void registerComments(CommentsConfiguration config) {
-        config.setComment("",
+        config.setComment("", "\n",
                 " .88888.  oo                       888888ba             dP   " ,
-                              "d8'   `88                          88    `8b            88   " ,
-                              "88        dP dP   .dP .d8888b.    a88aaaa8P' .d8888b. d8888P " ,
-                              "88   YP88 88 88   d8' 88ooood8     88        88ooood8   88   " ,
-                              "Y8.   .88 88 88 .88'  88.  ...     88        88.  ...   88   " ,
-                              " `88888'  dP 8888P'   `88888P'     dP        `88888P'   dP" ,
-                              "\n" ,
-                              " This is GivePet's messages.yml, if you wish to know how to  " ,
-                              " format the messages, please refer to this site: https://mf.mattstudios.me/message/mf-msg/syntax",
-                              "\n");
+                "d8'   `88                          88    `8b            88   " ,
+                "88        dP dP   .dP .d8888b.    a88aaaa8P' .d8888b. d8888P " ,
+                "88   YP88 88 88   d8' 88ooood8     88        88ooood8   88   " ,
+                "Y8.   .88 88 88 .88'  88.  ...     88        88.  ...   88   " ,
+                " `88888'  dP 8888P'   `88888P'     dP        `88888P'   dP" ,
+                "\n" ,
+                " This is GivePet's messages.yml, if you wish to know how to" ,
+                " format the messages, please refer to this site: https://mf.mattstudios.me/message/mf-msg/syntax",
+                "\n");
     }
 
     public static final Property<String> PREFIX = new StringProperty("prefix", "<g:#4884ee:#06bcfb>GivePet");
@@ -48,7 +48,7 @@ public final class Messages implements SettingsHolder {
     public static final Property<String> RECEIVER_REQUEST_EXPIRED = new StringProperty("receiver-request-expired", "%prefix% &cRequest expired.");
 
     public static final Property<String> RECEIVER_PENDING_REQUEST = new StringProperty("receiver-pending-request", "%prefix% &cThat player has an active request with another player!");
-    
+
     public static final Property<String> SENDER_PENDING_REQUEST = new StringProperty("pending-request", "%prefix% &cYou still have an active request with a player!");
 
     public static final Property<String> NO_PENDING_REQUEST = new StringProperty("no-pending-request", "%prefix% &cNo one sent you a request.");
@@ -63,7 +63,9 @@ public final class Messages implements SettingsHolder {
 
     public static final Property<String> UNKNOWN_COMMAND = new StringProperty("unknown-command", "%prefix% &cUnknown command. Please do &a/givepet help &cfor available commands.");
 
+    public static final Property<String> INVALID_ARGUMENT = new StringProperty("invalid-argument", "%prefix% &cInvalid arguments. Usage: %usage%.");
+
     public static final Property<String> HELP_HEADER = new StringProperty("help-header", "<g:#ec9f05:#ff4e00>=========== %prefix% commands list<g:#ff4e00:#ec9f05> ==========");
-    public static final Property<String> HELP_COMMAND = new StringProperty("help-command", "[%usage%](hover: Click to suggest the &a%command%&f command.|suggest: /givepet %command%) - %description%");
-    public static final Property<String> HELP_FOOTER = new StringProperty("help-footer", "<g:#ec9f05:#ff4e00>============================================");
+    public static final Property<String> HELP_COMMAND = new StringProperty("help-command", "[<g:#4884ee:#06bcfb>%usage%](hover: Click to suggest the &a%command%&f command.|suggest: /givepet %command%) &f%description%");
+    public static final Property<String> HELP_FOOTER = new StringProperty("help-footer", "<g:#ec9f05:#ff4e00>====================<g:#ff4e00:#ec9f05>====================");
 }

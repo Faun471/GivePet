@@ -17,6 +17,9 @@ public final class Config implements SettingsHolder {
                 "88   YP88 88 88   d8' 88ooood8     88        88ooood8   88   " ,
                 "Y8.   .88 88 88 .88'  88.  ...     88        88.  ...   88   " ,
                 " `88888'  dP 8888P'   `88888P'     dP        `88888P'   dP" ,
+                "\n" ,
+                " This is GivePet's config.yml, if you need any help or" ,
+                " assistance, feel free to message me on Discord: Faun#6901",
                 "\n");
     }
 

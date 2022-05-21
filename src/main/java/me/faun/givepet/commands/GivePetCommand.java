@@ -31,12 +31,7 @@ class GivePetCommand extends BaseCommand {
     @SubCommand("request")
     @Description("Send a request to another player.")
     @Usage("/givepet request [player]")
-    public void requestCommand(Player sender, @Suggestion("#players") Player receiver) {
-        if (receiver == null) {
-            StringUtils.sendComponent(sender, Messages.PLAYER_NOT_ONLINE);
-            return;
-        }
-
+    public void request(Player sender, @Suggestion("#players") Player receiver) {
         if (receiver == sender) {
             StringUtils.sendComponent(sender, Messages.CANNOT_TRANSFER_SELF);
             return;
@@ -62,7 +57,7 @@ class GivePetCommand extends BaseCommand {
     @SubCommand("help")
     @Description("Do you seriously need to know this command's description?")
     @Usage("/givepet help <command>")
-    public void helpCommand(CommandSender sender, @Suggestion("#help") @Optional String arg) {
+    public void help(CommandSender sender, @Suggestion("#help") @Optional String arg) {
         HashMap<String, Command> commands = CommandManager.getCommands();
 
         if (!commands.containsKey(arg)) {
@@ -89,7 +84,7 @@ class GivePetCommand extends BaseCommand {
     @Description("Reject an incoming request.")
     @Usage("/givepet reject")
     @Requirement(value = "has.request", messageKey = "no.pending.request")
-    public void rejectRequest(Player player) {
+    public void reject(Player player) {
         Bukkit.getPluginManager().callEvent(new PetRequestEvent(requests.get(player), State.REJECTED));
         requests.remove(player);
     }
@@ -98,7 +93,7 @@ class GivePetCommand extends BaseCommand {
     @Description("Accept an incoming request.")
     @Usage("/givepet accept")
     @Requirement(value = "has.request", messageKey = "no.pending.request")
-    public void acceptRequest(Player player) {
+    public void accept(Player player) {
         Bukkit.getPluginManager().callEvent(new PetRequestEvent(requests.get(player), State.ACCEPTED));
         requests.remove(player);
     }
@@ -109,10 +104,30 @@ class GivePetCommand extends BaseCommand {
     @Usage("/givepet reload")
     public void reload(CommandSender commandSender) {
         ConfigManager configManager = new ConfigManager();
-        long time = System.currentTimeMillis();
+        double time = System.currentTimeMillis();
         configManager.reloadConfigs();
-        time -= System.currentTimeMillis();
+        time = System.currentTimeMillis() - time;
         StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.RELOAD_SUCCESS)
                 .replace("%time%", String.valueOf(time)));
+    }
+
+    @SubCommand("force")
+    @Permission("givepet.force")
+    @Description("Forcefully transfers someone's pet to someone else.")
+    @Usage("/givepet force [player]")
+    public void force(Player sender, @Suggestion("#players") Player receiver) {
+        if (receiver == null) {
+            StringUtils.sendComponent(sender, Messages.PLAYER_NOT_ONLINE);
+            return;
+        }
+
+        if (receiver == sender) {
+            StringUtils.sendComponent(sender, Messages.CANNOT_TRANSFER_SELF);
+            return;
+        }
+
+        Request request = new Request(sender.getUniqueId(), receiver.getUniqueId(), System.currentTimeMillis());
+        requests.put(receiver, request);
+        Bukkit.getPluginManager().callEvent(new PetRequestEvent(requests.get(receiver), State.FORCED));
     }
 }

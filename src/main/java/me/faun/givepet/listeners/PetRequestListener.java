@@ -33,7 +33,6 @@ public class PetRequestListener implements Listener {
         Player receiver = request.getReceiverAsPlayer();
 
         request.setAccepted(event.getState());
-
         switch (event.getState()) {
             case ACCEPTED -> {
                 sqlManager.logRequest(request.getSender().toString(), request.getReceiver().toString(), request.getTime(), "accepted");
@@ -99,6 +98,17 @@ public class PetRequestListener implements Listener {
                             .replace("%sender%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
                     GivePet.requests.remove(receiver);
                 }, 20L * (int) configManager.getConfigValue(Configs.CONFIG, Config.REQUEST_TIME));
+            }
+
+            case FORCED -> {
+                sqlManager.logRequest(request.getSender().toString(), request.getReceiver().toString(), request.getTime(), "forced");
+                requestsTable.delete(request.getSenderAsPlayer().getUniqueId().toString());
+
+                StringUtils.sendComponent(request.getSenderAsPlayer(), StringUtils.getStringFromMessages(Messages.SENDER_REQUEST_ACCEPT)
+                        .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
+                        .replace("%sender%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
+
+                PetUtils.addPDC(request.getSenderAsPlayer(), request.getReceiverAsPlayer().getName());
             }
         }
     }
