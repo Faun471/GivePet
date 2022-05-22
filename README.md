@@ -1,11 +1,17 @@
 <div style="text-align: center;"> <h1>GivePet </h1> </div>
 <div style="text-align: center;"> <strong> Supported versions: </strong> 1.17 and above.
 <br> <strong> Supported server software: </strong> Paper and its forks.</div>
+<br>
+<div style="text-align: center">
+    <a href="https://github.com/Faun471/GivePet/releases">
+        <img src="https://badgen.net/github/release/Faun471/GivePet" alt="Stable Releases" />
+    </a>
+    <a href="https://github.com/Faun471/GivePet/actions/workflows/gradle.yml">
+        <img src="https://github.com/Faun471/GivePet/actions/workflows/gradle.yml/badge.svg?branch=master&event=push" alt="Dev Builds" />
+    </a>
+</div>
 
 ---
-
-[![GitHub release](https://badgen.net/github/release/Faun471/GivePet)](https://github.com/Faun471/GivePet/releases)
-[![Java CI with Gradle](https://github.com/Faun471/GivePet/actions/workflows/gradle.yml/badge.svg?branch=master&event=push)](https://github.com/Faun471/GivePet/actions/workflows/gradle.yml)
 
 ## About project
 GivePet allows you to transfer pet ownership to another player. This plugin was made with
