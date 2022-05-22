@@ -73,7 +73,6 @@ public class PetRequestListener implements Listener {
                 BukkitTask runnable = new BukkitRunnable() {
                     @Override
                     public void run() {
-                        System.out.println(request.getAccepted());
                         if (request.getAccepted() == State.ACCEPTED || request.getAccepted() == State.REJECTED) {
                             cancel();
                         }
