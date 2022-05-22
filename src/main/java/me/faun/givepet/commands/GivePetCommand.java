@@ -106,9 +106,8 @@ class GivePetCommand extends BaseCommand {
         ConfigManager configManager = new ConfigManager();
         double time = System.currentTimeMillis();
         configManager.reloadConfigs();
-        time = System.currentTimeMillis() - time;
         StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.RELOAD_SUCCESS)
-                .replace("%time%", String.valueOf(time)));
+                .replace("%time%", String.valueOf(System.currentTimeMillis() - time)));
     }
 
     @SubCommand("force")

@@ -17,6 +17,12 @@ import java.util.HashMap;
 public class PetUtils {
     private static final NamespacedKey key = new NamespacedKey(GivePet.getInstance(), "give-pet");
 
+    /**
+     * This will add a pdc to the player.
+     *
+     * @param giver the player to add a pdc to.
+     * @param arg the value of the pdc that will be added to the player.
+     */
     public static void addPDC(@NotNull Player giver, String arg) {
         PersistentDataContainer pdc = giver.getPersistentDataContainer();
         pdc.set(key, PersistentDataType.STRING, arg);
@@ -31,16 +37,31 @@ public class PetUtils {
         }, 20L * 15);
     }
 
+    /**
+     * This will remove all the pdc attached on the player.
+     *
+     * @param player the player that will have their pdc removed.
+     */
     public static void removePDC(@NotNull Player player) {
         if (player.getPersistentDataContainer().has(key, PersistentDataType.STRING)) {
             player.getPersistentDataContainer().remove(key);
         }
     }
 
+    /**
+     * @return the plugin's NameSpacedKey.
+     */
     public static NamespacedKey getKey() {
         return key;
     }
 
+    /**
+     * This will check whether a player has an active request with another
+     * player or not.
+     *
+     * @param player the player to be checked.
+     * @return whether the player has an active request or not.
+     */
     public static boolean hasRequest(Player player) {
         GivePet plugin = GivePet.getInstance();
         HashMap<Player, Request> requests = GivePet.requests;

@@ -72,7 +72,7 @@ public class StringUtils {
      *  @param sender   The CommandSender that will receive the message.
      *  @param message  The message that will be sent to the command sender.
      */
-    public static void sendComponent(CommandSender sender, Property<String> message) {
+    public static void sendComponent(@NotNull CommandSender sender, Property<String> message) {
         sender.sendMessage(messageParse(getStringFromMessages(message)));
     }
 
@@ -100,6 +100,12 @@ public class StringUtils {
         }
     }
 
+    /**
+     * This will return the property's value as a string.
+     *
+     * @param property the property that needs to be returned.
+     * @return the property's value as a string.
+     */
     public static String getStringFromMessages(Property<String> property) {
         ConfigManager configManager = new ConfigManager();
         SettingsManager settingsManager = configManager.getConfig(Configs.MESSAGES);
