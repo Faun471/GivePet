@@ -53,7 +53,7 @@ public final class Messages implements SettingsHolder {
 
     public static final Property<String> NO_PENDING_REQUEST = new StringProperty("no-pending-request", "%prefix% &cNo one sent you a request.");
 
-    public static final Property<String> SENDER_REQUEST_ACCEPT = new StringProperty("sender-accept-request", "%prefix% &f%receiver% accepted the request.\nRight click the pet that you'd like to give");
+    public static final Property<String> SENDER_REQUEST_ACCEPT = new StringProperty("sender-accept-request", "%prefix% &f%receiver% accepted the request.\n%prefix% &fRight click the pet that you'd like to give");
 
     public static final Property<String> RECEIVER_REQUEST_ACCEPT = new StringProperty("receiver-accept-request", "%prefix% &fYou accepted %sender%'s request.");
 
