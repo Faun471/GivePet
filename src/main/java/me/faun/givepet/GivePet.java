@@ -14,6 +14,7 @@ import me.faun.givepet.commands.GivePetCommand;
 import me.faun.givepet.configs.ConfigManager;
 import me.faun.givepet.configs.Messages;
 import me.faun.givepet.listeners.PetRequestListener;
+import me.faun.givepet.listeners.PetTransferListener;
 import me.faun.givepet.listeners.PlayerInteractListener;
 import me.faun.givepet.request.Request;
 import me.faun.givepet.sql.SQLManager;
@@ -49,6 +50,7 @@ public final class GivePet extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(),this);
         Bukkit.getPluginManager().registerEvents(new PetRequestListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PetTransferListener(), this);
 
         setupCommands(BukkitCommandManager.create(this));
     }
