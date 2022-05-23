@@ -63,6 +63,10 @@ public class StringUtils {
      *  @param message  The message that will be sent to the player.
      */
     public static void sendComponent(@NotNull Player player, @NotNull Property<String> message) {
+        if (getStringFromMessages(message).isEmpty()) {
+            return;
+        }
+
         player.sendMessage(messageParse(getStringFromMessages(message)));
     }
 
@@ -73,6 +77,10 @@ public class StringUtils {
      *  @param message  The message that will be sent to the command sender.
      */
     public static void sendComponent(@NotNull CommandSender sender, Property<String> message) {
+        if (getStringFromMessages(message).isEmpty()) {
+            return;
+        }
+
         sender.sendMessage(messageParse(getStringFromMessages(message)));
     }
 
@@ -84,6 +92,10 @@ public class StringUtils {
      */
     public static void sendComponent(Player player, String @NotNull ... messages) {
         for (String message : messages) {
+            if (message.isEmpty()) {
+                return;
+            }
+
             player.sendMessage(messageParse(message));
         }
     }
@@ -96,6 +108,10 @@ public class StringUtils {
      */
     public static void sendComponent(CommandSender sender, String @NotNull ... messages) {
         for (String message : messages) {
+            if (message.isEmpty()) {
+                return;
+            }
+
             sender.sendMessage(messageParse(message));
         }
     }
