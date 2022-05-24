@@ -41,6 +41,8 @@ public final class GivePet extends JavaPlugin {
         logsTable = sqlManager.createLogsTable();
 
         ConfigManager configManager = new ConfigManager(this);
+        configManager.reloadConfigs();
+
         sqlManager.clearTable(requestsTable);
 
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(),this);
