@@ -9,13 +9,12 @@ import org.bukkit.Bukkit;
 import java.util.logging.Level;
 
 public class SQLManager extends SQLHandler {
+    private final GivePet plugin;
+
     public SQLManager(GivePet plugin) {
         super(plugin.getDataFolder().getAbsolutePath());
-        connect();
-    }
-
-    public void connect() {
         super.connect("database");
+        this.plugin = plugin;
     }
 
     @Override
@@ -51,7 +50,7 @@ public class SQLManager extends SQLHandler {
     }
 
     public void logRequest(String sender, String receiver, long time, String finished) {
-        SQLTable logsTable = GivePet.getInstance().getLogsTable();
+        SQLTable logsTable = plugin.getLogsTable();
         int id = logsTable.getSingleHighest("id") != null ? Integer.parseInt(logsTable.getSingleHighest("id")) + 1 : 1;
         logsTable.insert(logsTable.createUpdate("id")
                 .putData("id", id)

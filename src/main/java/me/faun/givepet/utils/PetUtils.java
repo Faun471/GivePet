@@ -15,7 +15,8 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 
 public class PetUtils {
-    private static final NamespacedKey key = new NamespacedKey(GivePet.getInstance(), "give-pet");
+    private static final GivePet plugin = GivePet.getPlugin(GivePet.class);
+    private static final NamespacedKey key = new NamespacedKey(plugin, "give-pet");
 
     /**
      * This will add a pdc to the player.
@@ -27,7 +28,7 @@ public class PetUtils {
         PersistentDataContainer pdc = giver.getPersistentDataContainer();
         pdc.set(key, PersistentDataType.STRING, arg);
 
-        Bukkit.getScheduler().runTaskLater(GivePet.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (pdc.isEmpty()) {
                 return;
             }
@@ -63,7 +64,6 @@ public class PetUtils {
      * @return whether the player has an active request or not.
      */
     public static boolean hasRequest(Player player) {
-        GivePet plugin = GivePet.getInstance();
         HashMap<Player, Request> requests = GivePet.requests;
         SQLTable requestsTable = plugin.getSqlTable();
 
@@ -72,6 +72,11 @@ public class PetUtils {
         }
 
         ResultSet receiver = requestsTable.select("receiver", player.getUniqueId().toString());
-        return !SQLUtils.getStringFromResultSet(receiver, "receiver").equalsIgnoreCase("null");
+        if (!SQLUtils.getStringFromResultSet(receiver, "receiver").equalsIgnoreCase("null")) {
+            return true;
+        }
+
+        ResultSet sender = requestsTable.select("sender", player.getUniqueId().toString());
+        return !SQLUtils.getStringFromResultSet(sender, "sender").equalsIgnoreCase("null");
     }
 }

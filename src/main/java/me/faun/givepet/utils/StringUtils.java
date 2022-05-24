@@ -2,6 +2,7 @@ package me.faun.givepet.utils;
 
 import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.properties.Property;
+import me.faun.givepet.GivePet;
 import me.faun.givepet.configs.ConfigManager;
 import me.faun.givepet.configs.Configs;
 import me.faun.givepet.configs.Messages;
@@ -12,15 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class StringUtils {
-    public static @NotNull String unixToDate(long unix) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return simpleDateFormat.format(new Date(unix));
-    }
-
     /**
      *  Returns a Component of the parsed message. This will also replace all instances of %prefix%.
      *
@@ -107,7 +100,7 @@ public class StringUtils {
      * @return the property's value as a string.
      */
     public static String getStringFromMessages(Property<String> property) {
-        ConfigManager configManager = new ConfigManager();
+        ConfigManager configManager = new ConfigManager(GivePet.getPlugin(GivePet.class));
         SettingsManager settingsManager = configManager.getConfig(Configs.MESSAGES);
         return settingsManager.getProperty(property);
     }

@@ -16,15 +16,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-public class PetRequestListener implements Listener {
-
-    private final GivePet plugin = GivePet.getInstance();
-    private final SQLManager sqlManager = new SQLManager(GivePet.getInstance());
-    private final SQLTable requestsTable = plugin.getSqlTable();
-    private final ConfigManager configManager = new ConfigManager();
+public record PetRequestListener(Plugin plugin, SQLTable requestsTable,
+                                 SQLManager sqlManager,
+                                 ConfigManager configManager) implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPetRequest(PetRequestEvent event) {
@@ -77,9 +75,9 @@ public class PetRequestListener implements Listener {
                             cancel();
                         }
                     }
-                }.runTaskTimerAsynchronously(GivePet.getInstance(), 20L, 20L);
+                }.runTaskTimerAsynchronously(plugin, 20L, 20L);
 
-                Bukkit.getScheduler().runTaskLater(GivePet.getInstance(), () -> {
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     if (runnable.isCancelled()) {
                         return;
                     }

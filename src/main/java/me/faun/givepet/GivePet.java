@@ -30,48 +30,30 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public final class GivePet extends JavaPlugin {
-
-    private static GivePet instance;
     private static SQLTable requestsTable;
     private static SQLTable logsTable;
     public static HashMap<Player, Request> requests = new HashMap<>();
 
     @Override
     public void onEnable() {
-        instance = this;
-
-        ConfigManager configManager = new ConfigManager();
-        configManager.reloadConfigs();
-
         SQLManager sqlManager = new SQLManager(this);
         requestsTable = sqlManager.createRequestsTable();
         logsTable = sqlManager.createLogsTable();
+
+        ConfigManager configManager = new ConfigManager(this);
         sqlManager.clearTable(requestsTable);
 
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(),this);
-        Bukkit.getPluginManager().registerEvents(new PetRequestListener(), this);
-        Bukkit.getPluginManager().registerEvents(new PetTransferListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PetRequestListener(this, requestsTable, sqlManager, configManager), this);
+        Bukkit.getPluginManager().registerEvents(new PetTransferListener(this, configManager), this);
 
-        setupCommands(BukkitCommandManager.create(this));
-    }
-
-    public static GivePet getInstance() {
-        return instance;
-    }
-
-    public SQLTable getSqlTable() {
-        return requestsTable;
-    }
-
-    public SQLTable getLogsTable() {
-        return logsTable;
-    }
-
-    private void setupCommands(BukkitCommandManager<CommandSender> bukkitCommandManager) {
+        BukkitCommandManager<CommandSender> bukkitCommandManager = BukkitCommandManager.create(this);
         bukkitCommandManager.registerRequirement(RequirementKey.of("has.request"), sender -> PetUtils.hasRequest((Player) sender));
 
-        bukkitCommandManager.registerSuggestion(SuggestionKey.of("#players"), (sender, context) -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toList());
-        bukkitCommandManager.registerSuggestion(SuggestionKey.of("#help"), (sender, context) -> CommandManager.getCommands().values().stream().filter((command -> CommandManager.hasPermission(sender, command))).map((Command::name)).collect(Collectors.toList()));
+        bukkitCommandManager.registerSuggestion(SuggestionKey.of("#help"), (sender, context) -> CommandManager.getCommands().values().stream()
+                .filter((command -> CommandManager.hasPermission(sender, command)))
+                .map((Command::name))
+                .collect(Collectors.toList()));
 
         bukkitCommandManager.registerMessage(MessageKey.of("no.pending.request", MessageContext.class), ((sender, context) -> StringUtils.sendComponent(sender, Messages.NO_PENDING_REQUEST)));
         bukkitCommandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) -> StringUtils.sendComponent(sender, Messages.UNKNOWN_COMMAND));
@@ -84,14 +66,23 @@ public final class GivePet extends JavaPlugin {
             }
         });
 
-        bukkitCommandManager.registerCommand(new GivePetCommand());
+        GivePetCommand givePetCommand = new GivePetCommand(this, requestsTable, requests);
+        bukkitCommandManager.registerCommand(givePetCommand);
+    }
+
+    public SQLTable getSqlTable() {
+        return requestsTable;
+    }
+
+    public SQLTable getLogsTable() {
+        return logsTable;
     }
 
     private static void sendHelp(@NotNull CommandSender sender, @NotNull DefaultMessageContext context) {
         Command command = CommandManager.getCommands().getOrDefault(context.getSubCommand(), null);
 
         if (command == null) {
-            new GivePetCommand().help(sender, null);
+            Bukkit.dispatchCommand(sender, "givepet help");
             return;
         }
 
@@ -99,7 +90,5 @@ public final class GivePet extends JavaPlugin {
                 .replace("%command%", command.name())
                 .replace("%description%", command.description())
                 .replace("%usage%", command.usage()));
-
     }
-
 }

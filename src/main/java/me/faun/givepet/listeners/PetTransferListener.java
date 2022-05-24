@@ -18,14 +18,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class PetTransferListener implements Listener {
+    private final GivePet plugin;
+    private final ConfigManager configManager;
+
+    public PetTransferListener(GivePet plugin, ConfigManager configManager) {
+        this.plugin = plugin;
+        this.configManager = configManager;
+    }
 
     @EventHandler(ignoreCancelled = true)
     public void onPetTransfer(PetTransferEvent event) {
         Player giver = event.getSender();
         Player receiver = event.getReceiver();
         Tameable pet = event.getPet();
-
-        ConfigManager configManager = new ConfigManager();
 
         if ((boolean) configManager.getConfigValue(Configs.CONFIG, Config.PET_STAND) && (pet instanceof Sittable sittable && sittable.isSitting())) {
             sittable.setSitting(false);
@@ -37,7 +42,7 @@ public class PetTransferListener implements Listener {
 
         pet.setInvulnerable(true);
 
-        Bukkit.getScheduler().runTaskLater(GivePet.getInstance(), () -> pet.setInvulnerable(false), 20L * ((int) configManager.getConfigValue(Configs.CONFIG, Config.PET_INVINCIBILITY_TIME)));
+        Bukkit.getScheduler().runTaskLater(plugin, () -> pet.setInvulnerable(false), 20L * ((int) configManager.getConfigValue(Configs.CONFIG, Config.PET_INVINCIBILITY_TIME)));
 
         PetUtils.removePDC(giver);
         pet.setOwner(receiver);
