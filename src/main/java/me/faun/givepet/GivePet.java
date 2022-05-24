@@ -68,7 +68,7 @@ public final class GivePet extends JavaPlugin {
             }
         });
 
-        GivePetCommand givePetCommand = new GivePetCommand(this, requestsTable, requests);
+        GivePetCommand givePetCommand = new GivePetCommand(requestsTable, requests, configManager);
         bukkitCommandManager.registerCommand(givePetCommand);
     }
 

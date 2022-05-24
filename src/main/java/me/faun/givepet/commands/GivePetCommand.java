@@ -23,14 +23,14 @@ import java.util.HashMap;
 @dev.triumphteam.cmd.core.annotation.Command("givepet")
 @Description("The GivePet plugin's main command.")
 public class GivePetCommand extends BaseCommand {
-    private final GivePet plugin;
+    private final ConfigManager configManager;
     private final SQLTable requestsTable;
     private final HashMap<Player, Request> requests;
 
-    public GivePetCommand(GivePet plugin, SQLTable requestsTable, HashMap<Player, Request> requests) {
-        this.plugin = plugin;
+    public GivePetCommand(SQLTable requestsTable, HashMap<Player, Request> requests, ConfigManager configManager) {
         this.requestsTable = requestsTable;
         this.requests = requests;
+        this.configManager = configManager;
     }
 
     @SubCommand("request")
@@ -108,7 +108,6 @@ public class GivePetCommand extends BaseCommand {
     @Description("Reloads the plugin.")
     @Usage("/givepet reload")
     public void reload(CommandSender commandSender) {
-        ConfigManager configManager = new ConfigManager(plugin);
         double time = System.currentTimeMillis();
         configManager.reloadConfigs();
         StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.RELOAD_SUCCESS)
