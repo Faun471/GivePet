@@ -54,11 +54,11 @@ public final class GivePet extends JavaPlugin {
         bukkitCommandManager.registerRequirement(RequirementKey.of("has.request"), sender -> PetUtils.hasRequest((Player) sender, requests));
 
         bukkitCommandManager.registerSuggestion(SuggestionKey.of("#help"), (sender, context) -> CommandManager.getCommands().values().stream()
-                .filter((command -> CommandManager.hasPermission(sender, command)))
+                .filter(command -> CommandManager.hasPermission(sender, command))
                 .map((Command::name))
                 .collect(Collectors.toList()));
 
-        bukkitCommandManager.registerMessage(MessageKey.of("no.pending.request", MessageContext.class), ((sender, context) -> StringUtils.sendComponent(sender, Messages.NO_PENDING_REQUEST)));
+        bukkitCommandManager.registerMessage(MessageKey.of("no.pending.request", MessageContext.class), (sender, context) -> StringUtils.sendComponent(sender, Messages.NO_PENDING_REQUEST));
         bukkitCommandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) -> StringUtils.sendComponent(sender, Messages.UNKNOWN_COMMAND));
         bukkitCommandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) -> StringUtils.sendComponent(sender, Messages.NO_PERMISSION));
         bukkitCommandManager.registerMessage(MessageKey.NOT_ENOUGH_ARGUMENTS, GivePet::sendHelp);

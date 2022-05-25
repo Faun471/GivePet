@@ -4,7 +4,6 @@ import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.*;
 import mc.obliviate.bloksqliteapi.sqlutils.SQLTable;
-import me.faun.givepet.GivePet;
 import me.faun.givepet.configs.ConfigManager;
 import me.faun.givepet.configs.Messages;
 import me.faun.givepet.events.PetRequestEvent;
