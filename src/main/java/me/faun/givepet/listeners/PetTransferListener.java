@@ -17,13 +17,17 @@ import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.HashMap;
+
 public class PetTransferListener implements Listener {
     private final GivePet plugin;
     private final ConfigManager configManager;
+    private final HashMap<Player, Request> requests;
 
-    public PetTransferListener(GivePet plugin, ConfigManager configManager) {
+    public PetTransferListener(GivePet plugin, ConfigManager configManager, HashMap<Player, Request> requests) {
         this.plugin = plugin;
         this.configManager = configManager;
+        this.requests = requests;
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -47,7 +51,7 @@ public class PetTransferListener implements Listener {
         PetUtils.removePDC(giver);
         pet.setOwner(receiver);
 
-        Request request = GivePet.requests.get(receiver);
+        Request request = requests.get(receiver);
 
         StringUtils.sendComponent(giver, StringUtils.getStringFromMessages(Messages.GIVE_PET_SUCCESS)
                 .replace("%receiver%", StringUtils.componentToString(receiver.displayName()))

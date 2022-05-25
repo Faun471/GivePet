@@ -32,13 +32,14 @@ import java.util.stream.Collectors;
 public final class GivePet extends JavaPlugin {
     private static SQLTable requestsTable;
     private static SQLTable logsTable;
-    public static HashMap<Player, Request> requests = new HashMap<>();
+    private static HashMap<Player, Request> requests;
 
     @Override
     public void onEnable() {
         SQLManager sqlManager = new SQLManager(this);
         requestsTable = sqlManager.createRequestsTable();
         logsTable = sqlManager.createLogsTable();
+        requests = new HashMap<>();
 
         ConfigManager configManager = new ConfigManager(this);
         configManager.reloadConfigs();
@@ -46,11 +47,11 @@ public final class GivePet extends JavaPlugin {
         sqlManager.clearTable(requestsTable);
 
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(),this);
-        Bukkit.getPluginManager().registerEvents(new PetRequestListener(this, requestsTable, sqlManager, configManager), this);
-        Bukkit.getPluginManager().registerEvents(new PetTransferListener(this, configManager), this);
+        Bukkit.getPluginManager().registerEvents(new PetRequestListener(this, requestsTable, sqlManager, configManager, requests), this);
+        Bukkit.getPluginManager().registerEvents(new PetTransferListener(this, configManager, requests), this);
 
         BukkitCommandManager<CommandSender> bukkitCommandManager = BukkitCommandManager.create(this);
-        bukkitCommandManager.registerRequirement(RequirementKey.of("has.request"), sender -> PetUtils.hasRequest((Player) sender));
+        bukkitCommandManager.registerRequirement(RequirementKey.of("has.request"), sender -> PetUtils.hasRequest((Player) sender, requests));
 
         bukkitCommandManager.registerSuggestion(SuggestionKey.of("#help"), (sender, context) -> CommandManager.getCommands().values().stream()
                 .filter((command -> CommandManager.hasPermission(sender, command)))

@@ -63,8 +63,7 @@ public class PetUtils {
      * @param player the player to be checked.
      * @return whether the player has an active request or not.
      */
-    public static boolean hasRequest(Player player) {
-        HashMap<Player, Request> requests = GivePet.requests;
+    public static boolean hasRequest(Player player, HashMap<Player, Request> requests) {
         SQLTable requestsTable = plugin.getSqlTable();
 
         if (requests.containsKey(player)) {

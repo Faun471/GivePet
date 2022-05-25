@@ -42,7 +42,7 @@ public class GivePetCommand extends BaseCommand {
             return;
         }
 
-        if (PetUtils.hasRequest(receiver)) {
+        if (PetUtils.hasRequest(receiver, requests)) {
             StringUtils.sendComponent(sender, Messages.RECEIVER_PENDING_REQUEST);
             return;
         }
