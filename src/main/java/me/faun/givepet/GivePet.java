@@ -30,27 +30,57 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public final class GivePet extends JavaPlugin {
-    private static SQLTable requestsTable;
-    private static SQLTable logsTable;
-    private static HashMap<Player, Request> requests;
+    private SQLTable requestsTable;
+    private SQLTable logsTable;
+    private final HashMap<Player, Request> requests = new HashMap<>();
+    private ConfigManager configManager;
 
     @Override
     public void onEnable() {
         SQLManager sqlManager = new SQLManager(this);
         requestsTable = sqlManager.createRequestsTable();
         logsTable = sqlManager.createLogsTable();
-        requests = new HashMap<>();
 
-        ConfigManager configManager = new ConfigManager(this);
+        configManager = new ConfigManager(this);
         configManager.reloadConfigs();
 
         sqlManager.clearTable(requestsTable);
 
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(),this);
-        Bukkit.getPluginManager().registerEvents(new PetRequestListener(this, requestsTable, sqlManager, configManager, requests), this);
-        Bukkit.getPluginManager().registerEvents(new PetTransferListener(this, configManager, requests), this);
+        Bukkit.getPluginManager().registerEvents(new PetRequestListener(this, requestsTable, sqlManager, configManager), this);
+        Bukkit.getPluginManager().registerEvents(new PetTransferListener(this, configManager), this);
 
-        BukkitCommandManager<CommandSender> bukkitCommandManager = BukkitCommandManager.create(this);
+
+        setupCommands(BukkitCommandManager.create(this));
+    }
+
+    public SQLTable getSqlTable() {
+        return requestsTable;
+    }
+
+    public SQLTable getLogsTable() {
+        return logsTable;
+    }
+
+    public HashMap<Player, Request> getRequests() {
+        return requests;
+    }
+
+    private static void sendHelp(@NotNull CommandSender sender, @NotNull DefaultMessageContext context) {
+        Command command = CommandManager.getCommands().getOrDefault(context.getSubCommand(), null);
+
+        if (command == null) {
+            Bukkit.dispatchCommand(sender, "givepet help");
+            return;
+        }
+
+        StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.INVALID_ARGUMENT)
+                .replace("%command%", command.name())
+                .replace("%description%", command.description())
+                .replace("%usage%", command.usage()));
+    }
+
+    private void setupCommands(BukkitCommandManager<CommandSender> bukkitCommandManager) {
         bukkitCommandManager.registerRequirement(RequirementKey.of("has.request"), sender -> PetUtils.hasRequest((Player) sender, requests));
 
         bukkitCommandManager.registerSuggestion(SuggestionKey.of("#help"), (sender, context) -> CommandManager.getCommands().values().stream()
@@ -71,27 +101,5 @@ public final class GivePet extends JavaPlugin {
 
         GivePetCommand givePetCommand = new GivePetCommand(requestsTable, requests, configManager);
         bukkitCommandManager.registerCommand(givePetCommand);
-    }
-
-    public SQLTable getSqlTable() {
-        return requestsTable;
-    }
-
-    public SQLTable getLogsTable() {
-        return logsTable;
-    }
-
-    private static void sendHelp(@NotNull CommandSender sender, @NotNull DefaultMessageContext context) {
-        Command command = CommandManager.getCommands().getOrDefault(context.getSubCommand(), null);
-
-        if (command == null) {
-            Bukkit.dispatchCommand(sender, "givepet help");
-            return;
-        }
-
-        StringUtils.sendComponent(sender, StringUtils.getStringFromMessages(Messages.INVALID_ARGUMENT)
-                .replace("%command%", command.name())
-                .replace("%description%", command.description())
-                .replace("%usage%", command.usage()));
     }
 }

@@ -1,6 +1,7 @@
 package me.faun.givepet.listeners;
 
 import mc.obliviate.bloksqliteapi.sqlutils.SQLTable;
+import me.faun.givepet.GivePet;
 import me.faun.givepet.configs.Config;
 import me.faun.givepet.configs.ConfigManager;
 import me.faun.givepet.configs.Configs;
@@ -15,25 +16,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
-
 public final class PetRequestListener implements Listener {
-    private final Plugin plugin;
+    private final GivePet plugin;
     private final SQLTable requestsTable;
     private final SQLManager sqlManager;
     private final ConfigManager configManager;
-    private final HashMap<Player, Request> requests;
 
-    public PetRequestListener(Plugin plugin, SQLTable requestsTable, SQLManager sqlManager, ConfigManager configManager, HashMap<Player, Request> requests) {
+    public PetRequestListener(GivePet plugin, SQLTable requestsTable, SQLManager sqlManager, ConfigManager configManager) {
         this.plugin = plugin;
         this.requestsTable = requestsTable;
         this.sqlManager = sqlManager;
         this.configManager = configManager;
-        this.requests = requests;
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -105,7 +101,7 @@ public final class PetRequestListener implements Listener {
                     StringUtils.sendComponent(receiver, StringUtils.getStringFromMessages(Messages.RECEIVER_REQUEST_EXPIRED)
                             .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
                             .replace("%sender%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
-                    requests.remove(receiver);
+                    plugin.getRequests().remove(receiver);
                 }, 20L * (int) configManager.getConfigValue(Configs.CONFIG, Config.REQUEST_TIME));
             }
 
