@@ -4,7 +4,6 @@ import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.*;
 import mc.obliviate.bloksqliteapi.sqlutils.SQLTable;
-import me.faun.givepet.GivePet;
 import me.faun.givepet.configs.ConfigManager;
 import me.faun.givepet.configs.Messages;
 import me.faun.givepet.events.PetRequestEvent;
@@ -22,22 +21,27 @@ import java.util.HashMap;
 
 @dev.triumphteam.cmd.core.annotation.Command("givepet")
 @Description("The GivePet plugin's main command.")
-public
-class GivePetCommand extends BaseCommand {
-    private final GivePet plugin = GivePet.getInstance();
-    private final SQLTable requestsTable = plugin.getSqlTable();
-    private final HashMap<Player, Request> requests = GivePet.requests;
+public class GivePetCommand extends BaseCommand {
+    private final ConfigManager configManager;
+    private final SQLTable requestsTable;
+    private final HashMap<Player, Request> requests;
+
+    public GivePetCommand(SQLTable requestsTable, HashMap<Player, Request> requests, ConfigManager configManager) {
+        this.requestsTable = requestsTable;
+        this.requests = requests;
+        this.configManager = configManager;
+    }
 
     @SubCommand("request")
     @Description("Send a request to another player.")
     @Usage("/givepet request [player]")
-    public void request(Player sender, @Suggestion("#players") Player receiver) {
+    public void request(Player sender, Player receiver) {
         if (receiver == sender) {
             StringUtils.sendComponent(sender, Messages.CANNOT_TRANSFER_SELF);
             return;
         }
 
-        if (PetUtils.hasRequest(receiver)) {
+        if (PetUtils.hasRequest(receiver, requests)) {
             StringUtils.sendComponent(sender, Messages.RECEIVER_PENDING_REQUEST);
             return;
         }
@@ -103,7 +107,6 @@ class GivePetCommand extends BaseCommand {
     @Description("Reloads the plugin.")
     @Usage("/givepet reload")
     public void reload(CommandSender commandSender) {
-        ConfigManager configManager = new ConfigManager();
         double time = System.currentTimeMillis();
         configManager.reloadConfigs();
         StringUtils.sendComponent(commandSender, StringUtils.getStringFromMessages(Messages.RELOAD_SUCCESS)
@@ -114,7 +117,7 @@ class GivePetCommand extends BaseCommand {
     @Permission("givepet.force")
     @Description("Forcefully transfers someone's pet to someone else.")
     @Usage("/givepet force [player]")
-    public void force(Player sender, @Suggestion("#players") Player receiver) {
+    public void force(Player sender, Player receiver) {
         if (receiver == null) {
             StringUtils.sendComponent(sender, Messages.PLAYER_NOT_ONLINE);
             return;

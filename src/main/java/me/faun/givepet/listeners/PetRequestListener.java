@@ -19,12 +19,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-public class PetRequestListener implements Listener {
+public final class PetRequestListener implements Listener {
+    private final GivePet plugin;
+    private final SQLTable requestsTable;
+    private final SQLManager sqlManager;
+    private final ConfigManager configManager;
 
-    private final GivePet plugin = GivePet.getInstance();
-    private final SQLManager sqlManager = new SQLManager(GivePet.getInstance());
-    private final SQLTable requestsTable = plugin.getSqlTable();
-    private final ConfigManager configManager = new ConfigManager();
+    public PetRequestListener(GivePet plugin, SQLTable requestsTable, SQLManager sqlManager, ConfigManager configManager) {
+        this.plugin = plugin;
+        this.requestsTable = requestsTable;
+        this.sqlManager = sqlManager;
+        this.configManager = configManager;
+    }
 
     @EventHandler(ignoreCancelled = true)
     public void onPetRequest(PetRequestEvent event) {
@@ -77,9 +83,9 @@ public class PetRequestListener implements Listener {
                             cancel();
                         }
                     }
-                }.runTaskTimerAsynchronously(GivePet.getInstance(), 20L, 20L);
+                }.runTaskTimerAsynchronously(plugin, 20L, 20L);
 
-                Bukkit.getScheduler().runTaskLater(GivePet.getInstance(), () -> {
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     if (runnable.isCancelled()) {
                         return;
                     }
@@ -95,7 +101,7 @@ public class PetRequestListener implements Listener {
                     StringUtils.sendComponent(receiver, StringUtils.getStringFromMessages(Messages.RECEIVER_REQUEST_EXPIRED)
                             .replace("%receiver%", StringUtils.componentToString(request.getReceiverAsPlayer().displayName()))
                             .replace("%sender%", StringUtils.componentToString(request.getSenderAsPlayer().displayName())));
-                    GivePet.requests.remove(receiver);
+                    plugin.getRequests().remove(receiver);
                 }, 20L * (int) configManager.getConfigValue(Configs.CONFIG, Config.REQUEST_TIME));
             }
 

@@ -11,10 +11,11 @@ import java.nio.file.Path;
 import java.util.HashMap;
 
 public class ConfigManager {
-    private final HashMap<Configs, SettingsManager> configs;
+    private final GivePet plugin;
+    private final HashMap<Configs, SettingsManager> configs = new HashMap<>();
 
-    public ConfigManager() {
-        this.configs = new HashMap<>();
+    public ConfigManager(GivePet plugin) {
+        this.plugin = plugin;
     }
 
     public void reloadConfigs() {
@@ -33,7 +34,7 @@ public class ConfigManager {
 
     public void loadConfig(Configs name) {
         String fileName = name.name().toLowerCase() + ".yml";
-        File file = new File(GivePet.getInstance().getDataFolder(), fileName);
+        File file = new File(plugin.getDataFolder(), fileName);
 
         if (!file.exists()) {
             file.getParentFile().mkdirs();
